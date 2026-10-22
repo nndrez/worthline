@@ -1,0 +1,357 @@
+{
+  "app": {
+    "name": "worthline",
+    "tagline": "Il valore delle tue scelte.",
+    "personal": "Finanza personale",
+    "skip": "Vai al contenuto",
+    "footer": "Un passo alla volta, una visione più chiara.",
+    "dataNote": "Rilevazioni mensili · Valori in euro",
+    "notFound": "Questa pagina non esiste",
+    "backHome": "Torna alla panoramica"
+  },
+  "nav": {
+    "overview": "Panoramica",
+    "accounts": "Conti",
+    "balances": "Saldi mensili",
+    "transactions": "Movimenti",
+    "portfolio": "Portafoglio",
+    "operations": "Operazioni",
+    "categories": "Categorie"
+  },
+  "common": {
+    "create": "Aggiungi",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "close": "Chiudi",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "deleting": "Eliminazione…",
+    "retry": "Riprova",
+    "all": "Tutti",
+    "search": "Cerca",
+    "filters": "Filtri",
+    "clear": "Azzera filtri",
+    "loading": "Caricamento dei dati…",
+    "empty": "Ancora nessun dato",
+    "emptyDescription": "Inizia aggiungendo il primo elemento. Lo ritroverai qui, sempre in ordine.",
+    "noMatches": "Nessun risultato",
+    "noMatchesDescription": "Prova a modificare i filtri o a rimuoverli per vedere tutti i risultati.",
+    "results": "{{count}} risultati",
+    "page": "Pagina {{current}} di {{total}}",
+    "pagination": "Paginazione",
+    "previous": "Pagina precedente",
+    "next": "Pagina successiva",
+    "required": "Questo campo è obbligatorio.",
+    "invalidField": "Campo non valido",
+    "checkFields": "Controlla questi campi",
+    "invalidForm": "Controlla i campi obbligatori prima di continuare.",
+    "invalidMoney": "Inserisci un importo valido, con al massimo due decimali.",
+    "invalidTrade": "Inserisci prezzo e quantità positivi, con al massimo sei decimali.",
+    "reference": "Riferimento",
+    "actions": "Azioni",
+    "deleteTitle": "Eliminare questo elemento?",
+    "deleteDescription": "Stai per eliminare «{{name}}». L’operazione non può essere annullata. Gli elementi utilizzati da altri dati non possono essere eliminati.",
+    "choose": "Seleziona un’opzione",
+    "optional": "Facoltativo",
+    "currency": "Euro",
+    "missing": "Da registrare",
+    "recorded": "Registrato",
+    "sort": "Ordina",
+    "information": "Informazioni",
+    "fieldError": "Valore non valido.",
+    "noNotes": "Nessuna nota",
+    "result": "1 risultato",
+    "sections": "Sezioni"
+  },
+  "fields": {
+    "name": "Nome",
+    "type": "Tipo",
+    "parentId": "Categoria principale",
+    "date": "Data",
+    "accountId": "Conto",
+    "amount": "Importo",
+    "description": "Descrizione",
+    "categoryId": "Categoria",
+    "tag": "Tag",
+    "notes": "Note",
+    "code": "Codice",
+    "isin": "ISIN",
+    "ticker": "Ticker",
+    "instrumentId": "Strumento",
+    "market": "Mercato",
+    "broker": "Intermediario",
+    "unitPrice": "Prezzo unitario",
+    "quantity": "Quantità",
+    "currency": "Valuta"
+  },
+  "types": {
+    "CASH": "Liquidità",
+    "INVESTMENT": "Investimenti",
+    "PENSION": "Pensione",
+    "INCOME": "Entrata",
+    "EXPENSE": "Uscita",
+    "BUY": "Acquisto",
+    "SELL": "Vendita",
+    "DIVIDEND": "Dividendo"
+  },
+  "accounts": {
+    "eyebrow": "IL TUO PATRIMONIO",
+    "title": "Ogni conto, al suo posto.",
+    "subtitle": "Organizza liquidità, investimenti e pensione in un unico spazio.",
+    "create": "Nuovo conto",
+    "edit": "Modifica conto",
+    "search": "Cerca un conto…",
+    "empty": "Il primo passo è un conto.",
+    "emptyDescription": "Aggiungi un conto corrente, il contante o un conto d’investimento per iniziare a costruire il tuo patrimonio.",
+    "dialogDescription": "Un nome riconoscibile e una tipologia: tutto quello che serve.",
+    "namePlaceholder": "Es. Conto principale",
+    "recordBalance": "Registra saldo"
+  },
+  "balances": {
+    "eyebrow": "RILEVAZIONI MENSILI",
+    "title": "Un’istantanea, ogni mese.",
+    "subtitle": "Inserisci il valore effettivo dei tuoi conti alla fine del mese.",
+    "create": "Registra saldo",
+    "edit": "Modifica saldo",
+    "empty": "Il mese è ancora da raccontare.",
+    "emptyDescription": "Registra i saldi di fine mese. Un saldo non inserito resta mancante, anche se hai già registrato i movimenti.",
+    "dialogDescription": "Il saldo è una rilevazione manuale: i movimenti non lo modificano.",
+    "month": "Mese di riferimento",
+    "dateHint": "La data viene impostata all’ultimo giorno del mese selezionato.",
+    "amountHint": "Inserisci il saldo reale, anche zero o negativo.",
+    "accountRequired": "Aggiungi prima un conto dalla sezione Conti.",
+    "manual": "Rilevazione manuale"
+  },
+  "transactions": {
+    "eyebrow": "ENTRATE E USCITE",
+    "title": "Dai ordine ai tuoi movimenti.",
+    "subtitle": "Le piccole spese e le grandi entrate, con la giusta prospettiva.",
+    "create": "Nuovo movimento",
+    "edit": "Modifica movimento",
+    "search": "Cerca una descrizione…",
+    "empty": "Qui iniziano i tuoi movimenti.",
+    "emptyDescription": "Registra un’entrata o un’uscita. Non serve indicare un conto o una carta.",
+    "dialogDescription": "Registra ciò che entra o esce, senza dover scegliere una carta.",
+    "descriptionPlaceholder": "Es. Spesa settimanale",
+    "tagPlaceholder": "Es. Viaggio, famiglia…",
+    "categoryRequired": "Aggiungi prima una categoria del tipo desiderato.",
+    "from": "Dal",
+    "to": "Al"
+  },
+  "categories": {
+    "eyebrow": "UN POSTO PER OGNI COSA",
+    "title": "Categorie che ti somigliano.",
+    "subtitle": "Scegli come organizzare entrate e uscite, con categorie e sottocategorie.",
+    "create": "Nuova categoria",
+    "edit": "Modifica categoria",
+    "search": "Cerca una categoria…",
+    "empty": "Cominciamo dalle categorie.",
+    "emptyDescription": "Crea le categorie per organizzare i tuoi movimenti. Puoi aggiungere un secondo livello di dettaglio.",
+    "dialogDescription": "Le categorie sono personalizzabili e possono avere un livello di sottocategorie.",
+    "root": "Categoria principale",
+    "child": "Sottocategoria",
+    "level": "Livello",
+    "rootChoice": "Nessuna · categoria principale",
+    "structureHint": "Dopo la creazione, tipo e categoria principale restano fissi. Puoi sempre modificare il nome.",
+    "namePlaceholder": "Es. Casa, Ristorazione, Stipendio"
+  },
+  "instruments": {
+    "eyebrow": "I TUOI INVESTIMENTI",
+    "title": "Il tuo portafoglio, in ordine.",
+    "subtitle": "Tutti gli strumenti che segui e le operazioni che registri.",
+    "create": "Nuovo strumento",
+    "edit": "Modifica strumento",
+    "search": "Cerca uno strumento…",
+    "empty": "Il tuo portafoglio parte da qui.",
+    "emptyDescription": "Aggiungi uno strumento finanziario, poi registra acquisti, vendite e dividendi.",
+    "dialogDescription": "Identifica lo strumento con un codice e un nome. ISIN e ticker sono facoltativi.",
+    "namePlaceholder": "Es. Fondo azionario globale",
+    "codePlaceholder": "Es. GLOBAL"
+  },
+  "operations": {
+    "eyebrow": "IL DIARIO DEGLI INVESTIMENTI",
+    "title": "Ogni operazione, sotto controllo.",
+    "subtitle": "Registra manualmente acquisti, vendite e dividendi.",
+    "create": "Nuova operazione",
+    "edit": "Modifica operazione",
+    "search": "Cerca un intermediario…",
+    "empty": "Nessuna operazione, per ora.",
+    "emptyDescription": "Aggiungi uno strumento e registra la prima operazione. Il patrimonio mensile resta una rilevazione separata.",
+    "dialogDescription": "L’importo finale è quello registrato: può includere commissioni o rettifiche.",
+    "instrumentRequired": "Aggiungi prima uno strumento dalla sezione Portafoglio.",
+    "amountHint": "Inserisci l’importo finale dell’operazione, sempre positivo."
+  },
+  "dashboard": {
+    "eyebrow": "LA TUA VISIONE D’INSIEME",
+    "title": "Il tuo patrimonio, con chiarezza.",
+    "subtitle": "Uno spazio per capire dove sei. E scegliere dove andare.",
+    "record": "Aggiorna i saldi",
+    "wealth": "Patrimonio rilevato",
+    "history": "L’evoluzione del tuo patrimonio",
+    "historyHint": "Valori registrati a fine mese",
+    "months": "{{count}} mesi",
+    "allocation": "Come si compone",
+    "allocationHint": "Il valore dei conti rilevati",
+    "income": "Entrate del mese",
+    "expenses": "Uscite del mese",
+    "cashFlow": "Risparmio del mese",
+    "flowHint": "Entrate meno uscite registrate",
+    "incomeHint": "Tutte le entrate registrate nel mese",
+    "expenseHint": "Tutte le uscite registrate nel mese",
+    "accounts": "I tuoi conti",
+    "accountsHint": "La situazione del mese selezionato",
+    "allAccounts": "Gestisci conti",
+    "completion": "Un piccolo gesto, ogni mese.",
+    "completionBody": "I tuoi movimenti raccontano come spendi. I saldi di fine mese raccontano dove sei. Tienili aggiornati per una visione più completa.",
+    "completionCount": "{{recorded}} conti rilevati su {{total}}",
+    "complete": "Tutti i saldi del mese sono registrati.",
+    "incomplete": "Mancano {{count}} saldi: il totale è parziale.",
+    "noBalance": "Registra i saldi per vedere il tuo patrimonio.",
+    "noHistory": "Il tuo percorso prende forma, mese dopo mese.",
+    "noHistoryBody": "Le rilevazioni mensili appariranno qui. I mesi senza dati restano vuoti.",
+    "chartLabel": "Andamento delle rilevazioni mensili del patrimonio",
+    "chartTable": "Dettaglio delle rilevazioni mensili",
+    "month": "Mese",
+    "value": "Patrimonio rilevato",
+    "partial": "Parziale",
+    "missing": "Nessuna rilevazione",
+    "start": "Il tuo prossimo passo",
+    "startTitle": "Diamo forma alla tua visione.",
+    "startBody": "Aggiungi i tuoi conti e registra i saldi di fine mese. Qui troverai una panoramica chiara di quello che stai costruendo.",
+    "startAction": "Aggiungi il primo conto",
+    "recordAction": "Completa i saldi",
+    "viewTransactions": "Vai ai movimenti",
+    "allocationUnavailable": "Con saldi negativi o un totale pari a zero, trovi i valori nel riepilogo.",
+    "incompleteOne": "Manca {{count}} saldo: il totale è parziale."
+  },
+  "errors": {
+    "generic": "Non è stato possibile completare l’operazione. Riprova tra poco.",
+    "connection": "Non riusciamo a raggiungere i tuoi dati. Verifica che il backend sia avviato e riprova.",
+    "common": {
+      "request": {
+        "invalid": "Controlla i dati inseriti e riprova."
+      },
+      "resource": {
+        "conflict": "Questo elemento esiste già oppure è utilizzato da altri dati."
+      },
+      "http": {
+        "error": "La richiesta non può essere completata."
+      },
+      "internal": {
+        "error": "Si è verificato un errore. Riprova tra poco."
+      }
+    },
+    "category": {
+      "in": {
+        "use": "La categoria contiene sottocategorie o movimenti e non può essere eliminata."
+      },
+      "not": {
+        "found": "La categoria non è più disponibile."
+      },
+      "structure": {
+        "immutable": "Puoi modificare il nome, ma non il tipo o la categoria principale."
+      },
+      "type": {
+        "mismatch": "Scegli una categoria dello stesso tipo del movimento."
+      },
+      "parent": {
+        "invalid": "Scegli una categoria principale dello stesso tipo."
+      }
+    },
+    "transactions": {
+      "date": {
+        "range": {
+          "invalid": "La data iniziale deve precedere o coincidere con quella finale."
+        }
+      }
+    },
+    "transaction": {
+      "not": {
+        "found": "Il movimento non è più disponibile."
+      }
+    },
+    "wealth": {
+      "date": {
+        "range": {
+          "invalid": "La data iniziale deve precedere o coincidere con quella finale."
+        }
+      }
+    },
+    "account": {
+      "in": {
+        "use": "Il conto ha saldi registrati e non può essere eliminato."
+      },
+      "not": {
+        "found": "Il conto non è più disponibile."
+      }
+    },
+    "balance": {
+      "date": {
+        "not": {
+          "month": {
+            "end": "La data del saldo deve essere l’ultimo giorno del mese."
+          }
+        }
+      }
+    },
+    "monthly": {
+      "balance": {
+        "not": {
+          "found": "Il saldo non è più disponibile."
+        }
+      }
+    },
+    "instrument": {
+      "in": {
+        "use": "Lo strumento ha operazioni registrate e non può essere eliminato."
+      },
+      "not": {
+        "found": "Lo strumento non è più disponibile."
+      }
+    },
+    "portfolio": {
+      "date": {
+        "range": {
+          "invalid": "La data iniziale deve precedere o coincidere con quella finale."
+        }
+      }
+    },
+    "dividend": {
+      "details": {
+        "invalid": "Per un dividendo inserisci solo l’importo, senza prezzo o quantità."
+      }
+    },
+    "investment": {
+      "operation": {
+        "not": {
+          "found": "L’operazione non è più disponibile."
+        }
+      }
+    },
+    "trade": {
+      "details": {
+        "required": "Per un acquisto o una vendita inserisci prezzo e quantità."
+      }
+    }
+  },
+  "controls": {
+    "datePlaceholder": "GG/MM/AAAA",
+    "selectPlaceholder": "Seleziona",
+    "noOptions": "Nessuna opzione disponibile",
+    "autocompletePlaceholder": "Seleziona…",
+    "autocompleteSearch": "Cerca…",
+    "autocompleteEmpty": "Nessun risultato",
+    "clear": "Cancella",
+    "openCalendar": "Apri calendario",
+    "rangeStart": "Data inizio",
+    "rangeEnd": "Data fine",
+    "clearRange": "Cancella date",
+    "previousMonth": "Mese precedente",
+    "nextMonth": "Mese successivo",
+    "close": "Chiudi",
+    "previousYear": "Anno precedente",
+    "nextYear": "Anno successivo",
+    "monthPlaceholder": "MM/AAAA"
+  }
+}

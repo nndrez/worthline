@@ -1,0 +1,39 @@
+@let data = summary();
+<div class="cash-flow-grid">
+  <section class="panel metric-card">
+    <div class="metric-heading">
+      <span class="metric-icon"><app-icon name="down" /></span
+      ><span>{{ 'dashboard.income' | translate }}</span
+      ><a
+        routerLink="/transactions"
+        [queryParams]="{ type: 'INCOME', from: month() + '-01', to: monthEnd(month()) }"
+        [attr.aria-label]="'dashboard.viewTransactions' | translate"
+        ><app-icon name="arrow"
+      /></a>
+    </div>
+    <p class="metric-value">{{ data.income | money }}</p>
+    <p class="metric-hint">{{ 'dashboard.incomeHint' | translate }}</p>
+  </section>
+  <section class="panel metric-card">
+    <div class="metric-heading">
+      <span class="metric-icon"><app-icon name="up" /></span
+      ><span>{{ 'dashboard.expenses' | translate }}</span
+      ><a
+        routerLink="/transactions"
+        [queryParams]="{ type: 'EXPENSE', from: month() + '-01', to: monthEnd(month()) }"
+        [attr.aria-label]="'dashboard.viewTransactions' | translate"
+        ><app-icon name="arrow"
+      /></a>
+    </div>
+    <p class="metric-value">{{ data.expenses | money }}</p>
+    <p class="metric-hint">{{ 'dashboard.expenseHint' | translate }}</p>
+  </section>
+  <section class="panel metric-card saving-card">
+    <div class="metric-heading">
+      <span class="metric-icon"><app-icon name="leaf" /></span
+      ><span>{{ 'dashboard.cashFlow' | translate }}</span>
+    </div>
+    <p class="metric-value">{{ data.cashFlow | money }}</p>
+    <p class="metric-hint">{{ 'dashboard.flowHint' | translate }}</p>
+  </section>
+</div>

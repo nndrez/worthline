@@ -1,0 +1,24 @@
+spring:
+  config:
+    import: "optional:file:./.env[.properties]"
+  application:
+    name: backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:worthline}}
+    username: ${DB_USERNAME:worthline}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
+logging:
+  level:
+    # PostgreSQL constraint messages can contain submitted financial values.
+    org.hibernate.orm.jdbc.error: "OFF"

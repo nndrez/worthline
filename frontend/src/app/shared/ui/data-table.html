@@ -1,0 +1,37 @@
+<ng-content select="[tableToolbar]" />
+<div class="table-body-frame">
+  <div #viewport class="table-viewport" role="region" [attr.aria-label]="label()" tabindex="0">
+    @if (error(); as error) {
+      <app-notice class="table-error" [error]="error" [retryable]="true" (retry)="retry.emit()" />
+    }
+    <div class="table-content" [attr.inert]="loading() ? '' : null">
+      <ng-content />
+    </div>
+    @if (loading() && !page()) {
+      <div class="table-skeleton" aria-hidden="true">
+        <div class="skeleton-heading"></div>
+        @for (row of skeletonRows; track row) {
+          <div
+            class="skeleton-row"
+            [style.grid-template-columns]="'repeat(' + columns() + ', minmax(0, 1fr))'"
+          >
+            @for (cell of skeletonCells.slice(0, columns()); track cell) {
+              <span class="skeleton-cell"></span>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+  @if (loading()) {
+    <div class="table-progress" aria-hidden="true"></div>
+    <p class="sr-only" role="status">{{ 'common.loading' | translate }}</p>
+  }
+</div>
+@if (page(); as page) {
+  <app-pagination [page]="page" [disabled]="loading()" (pageChange)="pageChange.emit($event)" />
+} @else if (loading() && contained()) {
+  <div class="table-pagination-skeleton" aria-hidden="true">
+    <span class="skeleton-cell"></span>
+  </div>
+}

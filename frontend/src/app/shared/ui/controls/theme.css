@@ -1,0 +1,102 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+:root {
+  --ui-brand: var(--text);
+  --ui-on-brand: var(--surface);
+  --ui-brand-accent: var(--accent);
+  --ui-surface: var(--surface);
+  --ui-surface-muted: var(--surface-alt);
+  --ui-surface-raised: var(--surface);
+  --ui-fg: var(--text);
+  --ui-fg-muted: var(--muted);
+  --ui-fg-subtle: var(--muted);
+  --ui-border: var(--border);
+  --ui-border-strong: var(--border-strong);
+  --ui-ring: var(--accent);
+  --ui-danger: var(--danger);
+  --ui-on-danger: var(--surface);
+  --ui-danger-soft: var(--danger-bg);
+  --ui-success: var(--accent);
+  --ui-success-soft: var(--accent-light);
+  --ui-warning: var(--warning-text);
+  --ui-warning-soft: var(--warning-bg);
+  --ui-font-sans: var(--font);
+  --ui-radius-field: 8px;
+  --ui-radius-card: var(--radius);
+  --ui-shadow-field: 0 1px 2px var(--shadow-soft-ink);
+  --ui-shadow-popover: 0 12px 40px var(--shadow-ink), 0 2px 6px var(--shadow-soft-ink);
+  --ui-field-px: 12px;
+  --ui-field-py: 9px;
+}
+ui-datepicker,
+ui-date-range-picker,
+ui-select {
+  min-width: 0;
+}
+.toolbar ui-date-range-picker {
+  width: min(100%, 310px);
+}
+.toolbar ui-select {
+  min-width: 155px;
+}
+ui-datepicker.ui-month-picker {
+  width: 200px;
+  max-width: 100%;
+}
+fieldset:disabled :is(ui-select, ui-datepicker, ui-date-range-picker) {
+  pointer-events: none;
+  opacity: 0.6;
+}
+@theme inline {
+  --color-brand: var(--ui-brand);
+  --color-on-brand: var(--ui-on-brand);
+  --color-brand-accent: var(--ui-brand-accent);
+
+  --color-surface: var(--ui-surface);
+  --color-surface-muted: var(--ui-surface-muted);
+  --color-surface-raised: var(--ui-surface-raised);
+  --color-fg: var(--ui-fg);
+  --color-fg-muted: var(--ui-fg-muted);
+  --color-fg-subtle: var(--ui-fg-subtle);
+  --color-border: var(--ui-border);
+  --color-border-strong: var(--ui-border-strong);
+  --color-ring: var(--ui-ring);
+  --color-overlay: var(--ui-overlay);
+
+  --color-danger: var(--ui-danger);
+  --color-on-danger: var(--ui-on-danger);
+  --color-danger-soft: var(--ui-danger-soft);
+  --color-success: var(--ui-success);
+  --color-success-soft: var(--ui-success-soft);
+  --color-warning: var(--ui-warning);
+  --color-warning-soft: var(--ui-warning-soft);
+
+  --color-field: var(--ui-field-bg, var(--ui-surface));
+  --color-field-border: var(--ui-field-border, var(--ui-border));
+  --color-field-focus: var(--ui-field-bg-focus, var(--ui-field-bg, var(--ui-surface)));
+  --color-panel: var(--ui-panel-bg, var(--ui-surface-raised));
+  --color-option-hover: var(--ui-option-hover, var(--ui-surface-muted));
+  --color-button-secondary: var(--ui-button-secondary-bg, var(--ui-surface));
+  --color-button-secondary-border: var(--ui-button-secondary-border, var(--ui-border));
+  --color-button-secondary-hover: var(--ui-button-secondary-hover, var(--ui-surface-muted));
+  --color-card: var(--ui-card-bg, var(--ui-surface));
+  --color-card-border: var(--ui-card-border, var(--ui-border));
+  --color-spinner: var(--ui-spinner, var(--ui-fg-muted));
+  --color-spinner-track: var(--ui-spinner-track, var(--ui-border));
+  --color-map-marker: var(--ui-map-marker, #ea4335);
+  --color-map-bg: var(--ui-map-bg, var(--ui-surface-muted));
+
+  --font-sans: var(--ui-font-sans);
+  --radius-field: var(--ui-radius-field);
+  --radius-card: var(--ui-radius-card);
+  --radius-button: var(--ui-radius-button, var(--ui-radius-field));
+  --shadow-card: var(--ui-shadow-card);
+  --shadow-popover: var(--ui-shadow-popover);
+  --shadow-field: var(--ui-shadow-field, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+  --shadow-field-focus: var(
+    --ui-shadow-field-focus,
+    var(--ui-shadow-field, 0 1px 2px 0 rgb(0 0 0 / 0.05))
+  );
+  --blur-field: var(--ui-field-blur, 0px);
+  --blur-panel: var(--ui-panel-blur, 0px);
+  --blur-card: var(--ui-card-blur, 0px);
+}

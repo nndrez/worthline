@@ -1,0 +1,104 @@
+<app-dialog-frame
+  [heading]="initial() ? 'transactions.edit' : 'transactions.create'"
+  description="transactions.dialogDescription"
+  [busy]="mutation.busy()"
+  (closed)="closed.emit()"
+>
+  <form (submit)="save($event)" novalidate>
+    <fieldset
+      [disabled]="mutation.busy()"
+      class="form-grid"
+      style="border: 0; padding: 0; margin: 0"
+    >
+      <div class="field">
+        <label for="transaction-type">{{ 'fields.type' | translate }}</label>
+        <ui-select
+          inputId="transaction-type"
+          [formField]="entry.type"
+          (valueChange)="entry.categoryId().value.set('')"
+          [options]="[
+            { value: 'INCOME', label: ('types.INCOME' | translate) },
+            { value: 'EXPENSE', label: ('types.EXPENSE' | translate) },
+          ]"
+        />
+        <app-field-error
+          [visible]="(attempted() || entry.type().touched()) && entry.type().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="transaction-date">{{ 'fields.date' | translate }}</label>
+        <ui-datepicker inputId="transaction-date" [formField]="entry.date" />
+        <app-field-error
+          [visible]="(attempted() || entry.date().touched()) && entry.date().invalid()"
+        />
+      </div>
+      <div class="field form-wide">
+        <label for="transaction-description">{{ 'fields.description' | translate }}</label>
+        <input uiInput id="transaction-description" type="text" [formField]="entry.description" />
+        <app-field-error
+          [visible]="
+            (attempted() || entry.description().touched()) && entry.description().invalid()
+          "
+        />
+      </div>
+      <div class="field">
+        <label for="transaction-amount">{{ 'fields.amount' | translate }}</label>
+        <input
+          uiInput
+          id="transaction-amount"
+          type="text"
+          [formField]="entry.amount"
+          inputmode="decimal"
+        />
+        <app-field-error
+          [visible]="(attempted() || entry.amount().touched()) && entry.amount().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="transaction-categoryId">{{ 'fields.categoryId' | translate }}</label>
+        <ui-select
+          inputId="transaction-categoryId"
+          [formField]="entry.categoryId"
+          [searchable]="true"
+          [options]="choices() | uiOptions: ('common.choose' | translate)"
+        />
+        <app-field-error
+          [visible]="(attempted() || entry.categoryId().touched()) && entry.categoryId().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="transaction-tag">{{ 'fields.tag' | translate }}</label>
+        <input uiInput id="transaction-tag" type="text" [formField]="entry.tag" />
+      </div>
+      <div class="field form-wide">
+        <label for="transaction-notes">{{ 'fields.notes' | translate }}</label>
+        <textarea uiInput id="transaction-notes" [formField]="entry.notes" rows="3"></textarea>
+      </div>
+    </fieldset>
+    <app-notice class="mt-4" [error]="options().error" />
+    @if (!options().loading && !options().error && !choices().length) {
+      <p class="inline-note mt-4">{{ 'transactions.categoryRequired' | translate }}</p>
+    }
+    @if (localError()) {
+      <p class="form-message" role="alert">{{ localError() | translate }}</p>
+    }
+    <app-notice class="mt-4" [error]="mutation.error()" />
+    <div class="dialog-actions">
+      <button
+        class="btn btn-secondary"
+        type="button"
+        [disabled]="mutation.busy()"
+        (click)="closed.emit()"
+      >
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        class="btn"
+        type="submit"
+        [disabled]="mutation.busy() || options().loading || !!options().error"
+      >
+        {{ (mutation.busy() ? 'common.saving' : 'common.save') | translate }}
+      </button>
+    </div>
+  </form></app-dialog-frame
+>

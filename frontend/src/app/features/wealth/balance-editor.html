@@ -1,0 +1,74 @@
+<app-dialog-frame
+  [heading]="initial() ? 'balances.edit' : 'balances.create'"
+  description="balances.dialogDescription"
+  [busy]="mutation.busy()"
+  (closed)="closed.emit()"
+>
+  <form (submit)="save($event)" novalidate>
+    <fieldset
+      [disabled]="mutation.busy()"
+      class="form-grid"
+      style="border: 0; padding: 0; margin: 0"
+    >
+      <div class="field">
+        <label for="balance-accountId">{{ 'fields.accountId' | translate }}</label>
+        <ui-select
+          inputId="balance-accountId"
+          [formField]="entry.accountId"
+          [searchable]="true"
+          [options]="choices() | uiOptions: ('common.choose' | translate)"
+        />
+        <app-field-error
+          [visible]="(attempted() || entry.accountId().touched()) && entry.accountId().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="balance-date">{{ 'fields.date' | translate }}</label>
+        <ui-datepicker inputId="balance-date" [formField]="entry.date" />
+        <app-field-error
+          [visible]="(attempted() || entry.date().touched()) && entry.date().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="balance-amount">{{ 'fields.amount' | translate }}</label>
+        <input
+          uiInput
+          id="balance-amount"
+          type="text"
+          [formField]="entry.amount"
+          inputmode="decimal"
+        />
+        <app-field-error
+          [visible]="(attempted() || entry.amount().touched()) && entry.amount().invalid()"
+        />
+        <span class="field-hint">{{ 'balances.amountHint' | translate }}</span>
+      </div>
+    </fieldset>
+    <p class="inline-note mt-5">{{ 'balances.dateHint' | translate }}</p>
+    <app-notice class="mt-4" [error]="options().error" />
+    @if (!options().loading && !options().error && !choices().length) {
+      <p class="inline-note mt-4">{{ 'balances.accountRequired' | translate }}</p>
+    }
+    @if (localError()) {
+      <p class="form-message" role="alert">{{ localError() | translate }}</p>
+    }
+    <app-notice class="mt-4" [error]="mutation.error()" />
+    <div class="dialog-actions">
+      <button
+        class="btn btn-secondary"
+        type="button"
+        [disabled]="mutation.busy()"
+        (click)="closed.emit()"
+      >
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        class="btn"
+        type="submit"
+        [disabled]="mutation.busy() || options().loading || !!options().error"
+      >
+        {{ (mutation.busy() ? 'common.saving' : 'common.save') | translate }}
+      </button>
+    </div>
+  </form></app-dialog-frame
+>

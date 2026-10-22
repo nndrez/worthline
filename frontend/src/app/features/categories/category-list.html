@@ -1,0 +1,136 @@
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">{{ 'categories.eyebrow' | translate }}</span>
+    <h1>{{ 'categories.title' | translate }}</h1>
+    <p>{{ 'categories.subtitle' | translate }}</p>
+  </div>
+  <div class="page-actions">
+    <button class="btn" (click)="edit(null)">
+      <app-icon name="plus" />{{ 'categories.create' | translate }}
+    </button>
+  </div>
+</section>
+<app-data-table
+  [label]="'categories.title' | translate"
+  [loading]="state().loading"
+  [error]="state().error"
+  [page]="state().data?.result.page ?? null"
+  [columns]="4"
+  (retry)="nav.reload()"
+  (pageChange)="nav.update({ page: $event })"
+>
+  <div tableToolbar class="toolbar">
+    <label class="search-field"
+      ><span class="sr-only">{{ 'common.search' | translate }}</span
+      ><app-icon name="search" /><input
+        uiInput
+        #nameSearch
+        type="search"
+        [placeholder]="'categories.search' | translate"
+        [value]="nav.params().get('name') || ''"
+        (input)="nav.search('name', nameSearch.value)"
+    /></label>
+    <label for="category-list-type-filter"
+      ><span class="sr-only">{{ 'fields.type' | translate }}</span
+      ><ui-select
+        inputId="category-list-type-filter"
+        [value]="nav.params().get('type') || ''"
+        (valueChange)="nav.update({ type: $event || null, page: null })"
+        [label]="'fields.type' | translate"
+        [options]="[
+          { value: '', label: ('common.all' | translate) },
+          { value: 'INCOME', label: ('types.INCOME' | translate) },
+          { value: 'EXPENSE', label: ('types.EXPENSE' | translate) },
+        ]" /></label
+    ><button class="text-link ml-auto" (click)="nav.clear()">
+      {{ 'common.clear' | translate }}
+    </button>
+  </div>
+
+  @if (state().data; as data) {
+    @if (data.result.content.length) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col" [attr.aria-sort]="sortDirection('name')">
+              <button class="sort-button" (click)="sort('name')">
+                {{ 'fields.name' | translate
+                }}<app-icon [name]="sortDirection('name') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col" [attr.aria-sort]="sortDirection('type')">
+              <button class="sort-button" (click)="sort('type')">
+                {{ 'fields.type' | translate
+                }}<app-icon [name]="sortDirection('type') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col">{{ 'categories.level' | translate }}</th>
+            <th scope="col" class="actions">
+              <span class="sr-only">{{ 'common.actions' | translate }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of data.result.content; track row.id) {
+            <tr>
+              <td>
+                <span class="row-name">{{ row.name }}</span>
+              </td>
+              <td>
+                <app-chip>{{ 'types.' + row.type | translate }}</app-chip>
+              </td>
+              <td>{{ (row.parentId ? 'categories.child' : 'categories.root') | translate }}</td>
+              <td class="actions">
+                <button
+                  class="icon-button"
+                  [attr.aria-label]="'common.edit' | translate"
+                  (click)="edit(row)"
+                >
+                  <app-icon name="edit" /></button
+                ><button
+                  class="icon-button"
+                  [attr.aria-label]="'common.delete' | translate"
+                  (click)="mutation.error.set(null); deleting.set(row)"
+                >
+                  <app-icon name="trash" />
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      @if (nav.params().get('name') || nav.params().get('type')) {
+        <app-empty-state
+          title="common.noMatches"
+          description="common.noMatchesDescription"
+          icon="search"
+          ><button class="btn btn-secondary btn-sm" (click)="nav.clear()">
+            {{ 'common.clear' | translate }}
+          </button></app-empty-state
+        >
+      } @else {
+        <app-empty-state
+          title="categories.empty"
+          description="categories.emptyDescription"
+          icon="tag"
+          ><button class="btn btn-sm" (click)="edit(null)">
+            <app-icon name="plus" />{{ 'categories.create' | translate }}
+          </button></app-empty-state
+        >
+      }
+    }
+  }
+</app-data-table>
+@if (editorOpen()) {
+  <app-category-editor [initial]="editing()" (saved)="saved()" (closed)="editorOpen.set(false)" />
+}
+@if (deleting(); as row) {
+  <app-confirmation
+    [name]="row.name"
+    [busy]="mutation.busy()"
+    [error]="mutation.error()"
+    (cancelled)="deleting.set(null)"
+    (confirm)="confirmDelete()"
+  />
+}

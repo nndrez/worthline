@@ -1,0 +1,51 @@
+<app-dialog-frame
+  [heading]="initial() ? 'accounts.edit' : 'accounts.create'"
+  description="accounts.dialogDescription"
+  [busy]="mutation.busy()"
+  (closed)="closed.emit()"
+>
+  <form (submit)="save($event)" novalidate>
+    <fieldset
+      [disabled]="mutation.busy()"
+      class="form-grid"
+      style="border: 0; padding: 0; margin: 0"
+    >
+      <div class="field">
+        <label for="account-name">{{ 'fields.name' | translate }}</label>
+        <input uiInput id="account-name" type="text" [formField]="entry.name" />
+        <app-field-error
+          [visible]="(attempted() || entry.name().touched()) && entry.name().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="account-type">{{ 'fields.type' | translate }}</label>
+        <ui-select
+          inputId="account-type"
+          [formField]="entry.type"
+          [options]="[
+            { value: 'CASH', label: ('types.CASH' | translate) },
+            { value: 'INVESTMENT', label: ('types.INVESTMENT' | translate) },
+            { value: 'PENSION', label: ('types.PENSION' | translate) },
+          ]"
+        />
+        <app-field-error
+          [visible]="(attempted() || entry.type().touched()) && entry.type().invalid()"
+        />
+      </div>
+    </fieldset>
+    <app-notice class="mt-4" [error]="mutation.error()" />
+    <div class="dialog-actions">
+      <button
+        class="btn btn-secondary"
+        type="button"
+        [disabled]="mutation.busy()"
+        (click)="closed.emit()"
+      >
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button class="btn" type="submit" [disabled]="mutation.busy()">
+        {{ (mutation.busy() ? 'common.saving' : 'common.save') | translate }}
+      </button>
+    </div>
+  </form></app-dialog-frame
+>

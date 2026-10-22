@@ -1,0 +1,70 @@
+:root {
+  --motion-enter-duration: 480ms;
+  --motion-panel-duration: 360ms;
+  --motion-refresh-duration: 240ms;
+  --motion-row-delay: 28ms;
+  --motion-row-delay-limit: 168ms;
+  --motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Shared components own these hooks; features never add their own animation. */
+.page-content > :not(router-outlet) {
+  animation: ui-content-enter var(--motion-enter-duration) var(--motion-easing) both;
+}
+.ui-popover-panel {
+  animation: ui-panel-enter var(--motion-panel-duration) var(--motion-easing) both;
+}
+app-dialog-frame dialog[open] {
+  animation: ui-dialog-enter var(--motion-enter-duration) var(--motion-easing) both;
+}
+app-dialog-frame dialog[open]::backdrop {
+  animation: ui-fade-enter var(--motion-enter-duration) ease-out both;
+}
+
+@keyframes ui-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ui-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ui-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ui-fade-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-content > :not(router-outlet),
+  .ui-popover-panel,
+  app-dialog-frame dialog[open],
+  app-dialog-frame dialog[open]::backdrop {
+    animation: none;
+  }
+}

@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+nav {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-alt);
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 13px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  transition:
+    color 160ms,
+    background 160ms,
+    box-shadow 160ms;
+}
+a:hover {
+  color: var(--text);
+}
+a.selected-tab {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-weight: 550;
+}
+@media (prefers-reduced-motion: reduce) {
+  a {
+    transition: none;
+  }
+}
+@media (max-width: 740px) {
+  a {
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,138 @@
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">{{ 'balances.eyebrow' | translate }}</span>
+    <h1>{{ 'balances.title' | translate }}</h1>
+    <p>{{ 'balances.subtitle' | translate }}</p>
+  </div>
+  <div class="page-actions">
+    <button class="btn" (click)="edit(null)">
+      <app-icon name="plus" />{{ 'balances.create' | translate }}
+    </button>
+  </div>
+</section>
+<app-data-table
+  [label]="'balances.title' | translate"
+  [loading]="state().loading"
+  [error]="state().error"
+  [page]="state().data?.result.page ?? null"
+  [columns]="4"
+  (retry)="nav.reload()"
+  (pageChange)="nav.update({ page: $event })"
+>
+  <div tableToolbar class="toolbar">
+    <app-tabs
+      [items]="[
+        { path: '/accounts', label: 'nav.accounts' },
+        { path: '/balances', label: 'nav.balances' },
+      ]"
+    />
+    <label class="field flex-row items-center" for="balances-month"
+      ><span class="sr-only">{{ 'balances.month' | translate }}</span
+      ><ui-datepicker
+        inputId="balances-month"
+        [value]="month()"
+        (valueChange)="nav.update({ month: $event, page: null })"
+        [monthOnly]="true"
+        [label]="'balances.month' | translate" /></label
+    ><button
+      class="text-link ml-auto"
+      (click)="nav.update({ accountId: null, sort: null, page: null })"
+    >
+      {{ 'common.clear' | translate }}
+    </button>
+  </div>
+
+  @if (state().data; as data) {
+    @if (data.result.content.length) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'fields.accountId' | translate }}</th>
+            <th scope="col" [attr.aria-sort]="sortDirection('date')">
+              <button class="sort-button" (click)="sort('date')">
+                {{ 'fields.date' | translate
+                }}<app-icon [name]="sortDirection('date') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col" class="numeric" [attr.aria-sort]="sortDirection('amount')">
+              <button class="sort-button" (click)="sort('amount')">
+                {{ 'fields.amount' | translate
+                }}<app-icon [name]="sortDirection('amount') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col" class="actions">
+              <span class="sr-only">{{ 'common.actions' | translate }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of data.result.content; track row.id) {
+            <tr>
+              <td>
+                <span class="row-name">{{ referenceName(row.accountId) }}</span>
+              </td>
+              <td>{{ dateLabel(row.date) }}</td>
+              <td class="numeric">{{ row.amount | money }}</td>
+              <td class="actions">
+                <button
+                  class="icon-button"
+                  [attr.aria-label]="'common.edit' | translate"
+                  (click)="edit(row)"
+                >
+                  <app-icon name="edit" /></button
+                ><button
+                  class="icon-button"
+                  [attr.aria-label]="'common.delete' | translate"
+                  (click)="mutation.error.set(null); deleting.set(row)"
+                >
+                  <app-icon name="trash" />
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      @if (nav.params().get('accountId')) {
+        <app-empty-state
+          title="common.noMatches"
+          description="common.noMatchesDescription"
+          icon="search"
+          ><button
+            class="btn btn-secondary btn-sm"
+            (click)="nav.update({ accountId: null, sort: null, page: null })"
+          >
+            {{ 'common.clear' | translate }}
+          </button></app-empty-state
+        >
+      } @else {
+        <app-empty-state
+          title="balances.empty"
+          description="balances.emptyDescription"
+          icon="wallet"
+          ><button class="btn btn-sm" (click)="edit(null)">
+            <app-icon name="plus" />{{ 'balances.create' | translate }}
+          </button></app-empty-state
+        >
+      }
+    }
+  }
+</app-data-table>
+@if (editorOpen()) {
+  <app-balance-editor
+    [initial]="editing()"
+    [month]="month()"
+    [accountId]="nav.params().get('accountId') || ''"
+    (saved)="saved()"
+    (closed)="editorOpen.set(false)"
+  />
+}
+@if (deleting(); as row) {
+  <app-confirmation
+    [name]="referenceName(row.accountId) + ' · ' + dateLabel(row.date)"
+    [busy]="mutation.busy()"
+    [error]="mutation.error()"
+    (cancelled)="deleting.set(null)"
+    (confirm)="confirmDelete()"
+  />
+}

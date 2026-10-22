@@ -1,0 +1,175 @@
+.overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.15fr) minmax(300px, 1fr);
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.15fr) minmax(300px, 1fr);
+  gap: 22px;
+}
+.accounts-preview td {
+  height: 65px;
+  font-size: 12px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+.account-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+.account-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  border-radius: 8px;
+  color: var(--muted);
+}
+.missing-badge {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+.completion-card {
+  background: var(--completion-bg);
+  border: 1px solid var(--completion-border);
+  border-radius: var(--radius);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.completion-icon {
+  font-size: 24px;
+  display: flex;
+  color: var(--completion-accent);
+  margin-bottom: 20px;
+}
+.completion-card .eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.3px;
+}
+.completion-card h2 {
+  font-size: 21px;
+  letter-spacing: -0.7px;
+  line-height: 1.4;
+  font-weight: 500;
+  margin-top: 9px;
+  max-width: 240px;
+}
+.completion-card p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--completion-text);
+  margin-top: 13px;
+}
+.completion-progress {
+  height: 4px;
+  border-radius: 5px;
+  background: var(--progress-track);
+  width: 100%;
+  margin-top: 23px;
+  overflow: hidden;
+}
+.completion-progress span {
+  display: block;
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 5px;
+}
+.completion-label {
+  font-size: 10px;
+  color: var(--completion-text);
+  margin: 10px 0 22px;
+}
+.completion-card .btn {
+  margin-top: auto;
+  font-size: 11px;
+  width: 100%;
+  justify-content: space-between;
+  background: var(--completion-button);
+}
+.dashboard-loading {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 22px;
+}
+.dashboard-loading > .panel {
+  min-height: 370px;
+}
+.welcome {
+  padding: 65px 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.welcome-icon {
+  font-size: 30px;
+  color: var(--accent);
+  display: flex;
+  margin-bottom: 24px;
+}
+.welcome h2 {
+  font-size: 32px;
+  letter-spacing: -1px;
+  font-weight: 500;
+  margin-top: 12px;
+}
+.welcome p {
+  max-width: 440px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+  margin: 16px 0 25px;
+}
+@media (max-width: 1000px) {
+  .overview-grid,
+  .bottom-grid {
+    grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr);
+  }
+}
+@media (max-width: 780px) {
+  .overview-grid,
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+  .completion-card p {
+    max-width: 440px;
+  }
+  .completion-card .btn {
+    max-width: 260px;
+  }
+}
+@media (max-width: 500px) {
+  .page-actions .btn {
+    font-size: 12px;
+  }
+  .welcome h2 {
+    font-size: 27px;
+  }
+}
+@media (max-width: 500px) {
+  .accounts-preview th:nth-child(2),
+  .accounts-preview td:nth-child(2) {
+    display: none;
+  }
+  .accounts-preview td,
+  .accounts-preview th {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .accounts-preview .account-name {
+    max-width: 155px;
+    white-space: normal;
+    line-height: 1.6;
+  }
+}

@@ -1,0 +1,83 @@
+<app-dialog-frame
+  [heading]="initial() ? 'categories.edit' : 'categories.create'"
+  description="categories.dialogDescription"
+  [busy]="mutation.busy()"
+  (closed)="closed.emit()"
+>
+  <form (submit)="save($event)" novalidate>
+    <fieldset
+      [disabled]="mutation.busy()"
+      class="form-grid"
+      style="border: 0; padding: 0; margin: 0"
+    >
+      <div class="field form-wide">
+        <label for="category-name">{{ 'fields.name' | translate }}</label>
+        <input uiInput id="category-name" type="text" [formField]="entry.name" />
+        <app-field-error
+          [visible]="(attempted() || entry.name().touched()) && entry.name().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="category-type">{{ 'fields.type' | translate }}</label>
+        @if (initial()) {
+          <input
+            uiInput
+            id="category-type"
+            readonly
+            [value]="'types.' + model().type | translate"
+          />
+        } @else {
+          <ui-select
+            inputId="category-type"
+            [formField]="entry.type"
+            [options]="[
+              { value: 'INCOME', label: ('types.INCOME' | translate) },
+              { value: 'EXPENSE', label: ('types.EXPENSE' | translate) },
+            ]"
+          />
+        }
+        <app-field-error
+          [visible]="(attempted() || entry.type().touched()) && entry.type().invalid()"
+        />
+      </div>
+      <div class="field">
+        <label for="category-parentId">{{ 'fields.parentId' | translate }}</label>
+        @if (initial()) {
+          <input
+            uiInput
+            id="category-parentId"
+            readonly
+            [value]="model().parentId ? parentName() : ('categories.rootChoice' | translate)"
+          />
+        } @else {
+          <ui-select
+            inputId="category-parentId"
+            [formField]="entry.parentId"
+            [searchable]="true"
+            [options]="choices() | uiOptions: ('categories.rootChoice' | translate)"
+          />
+        }
+      </div>
+    </fieldset>
+    <p class="inline-note mt-5">{{ 'categories.structureHint' | translate }}</p>
+    <app-notice class="mt-4" [error]="options().error" />
+    <app-notice class="mt-4" [error]="mutation.error()" />
+    <div class="dialog-actions">
+      <button
+        class="btn btn-secondary"
+        type="button"
+        [disabled]="mutation.busy()"
+        (click)="closed.emit()"
+      >
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        class="btn"
+        type="submit"
+        [disabled]="mutation.busy() || options().loading || !!options().error"
+      >
+        {{ (mutation.busy() ? 'common.saving' : 'common.save') | translate }}
+      </button>
+    </div>
+  </form></app-dialog-frame
+>

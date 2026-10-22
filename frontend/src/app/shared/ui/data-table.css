@@ -1,0 +1,218 @@
+app-data-table {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+app-data-table > .toolbar,
+app-data-table > app-pagination {
+  flex-shrink: 0;
+}
+app-data-table .table-body-frame {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+app-data-table .table-viewport {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+app-data-table .table-viewport:focus-visible {
+  outline-offset: -3px;
+}
+app-data-table .table-content {
+  min-height: 100%;
+  transition: opacity var(--motion-refresh-duration) var(--motion-easing);
+}
+app-data-table.is-loading .table-content {
+  opacity: 0.4;
+  pointer-events: none;
+}
+app-data-table .data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-alt);
+}
+app-data-table .table-error {
+  display: block;
+  padding: 20px;
+}
+app-data-table .table-content:has(app-empty-state) {
+  display: grid;
+  place-items: center;
+}
+app-data-table .table-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  overflow: hidden;
+  background: var(--accent-light);
+}
+app-data-table .table-progress::after {
+  content: '';
+  display: block;
+  width: 35%;
+  height: 100%;
+  background: var(--accent);
+  animation: table-progress 1.3s ease-in-out infinite;
+}
+app-data-table .table-skeleton {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--surface);
+}
+app-data-table .skeleton-heading {
+  height: 46px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+app-data-table .skeleton-row {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+  height: 78px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+app-data-table .skeleton-cell {
+  display: block;
+  width: 75%;
+  max-width: 170px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(100deg, var(--border) 20%, var(--surface-alt) 45%, var(--border) 70%);
+  background-size: 250% 100%;
+  animation: table-shimmer 1.6s ease-in-out infinite;
+}
+app-data-table .table-pagination-skeleton {
+  flex-shrink: 0;
+  height: 70px;
+  padding: 28px 24px;
+  border-top: 1px solid var(--border);
+}
+app-data-table.is-embedded {
+  display: block;
+  flex: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+app-data-table.is-embedded .table-viewport {
+  max-height: 340px;
+}
+@keyframes table-progress {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(390%);
+  }
+}
+@keyframes table-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  app-data-table .table-content {
+    transition: none;
+  }
+  app-data-table .skeleton-cell,
+  app-data-table .table-progress::after {
+    animation: none;
+  }
+}
+
+app-data-table .data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  white-space: nowrap;
+  text-align: left;
+}
+app-data-table .data-table th {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 550;
+  letter-spacing: 0.6px;
+  background: #fcfcfd;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  text-transform: uppercase;
+}
+app-data-table .data-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  height: 78px;
+}
+app-data-table .data-table tr:last-child td {
+  border-bottom: 0;
+}
+app-data-table .data-table tbody tr:hover {
+  background: #fcfcfd;
+}
+app-data-table .data-table .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.2px;
+}
+app-data-table .data-table .actions {
+  text-align: right;
+}
+app-data-table .data-table .actions button {
+  margin-left: 7px;
+}
+
+app-data-table .table-content:empty {
+  display: none;
+}
+@media (max-width: 740px) {
+  app-data-table > .toolbar {
+    gap: 8px;
+  }
+  app-data-table > .toolbar app-tabs {
+    order: 0;
+  }
+  app-data-table > .toolbar label:has(ui-select) {
+    order: 1;
+    flex: 0 0 124px;
+  }
+  app-data-table > .toolbar ui-select {
+    min-width: 0;
+  }
+  app-data-table > .toolbar ui-date-range-picker {
+    order: 2;
+  }
+  app-data-table > .toolbar .search-field {
+    order: 3;
+    flex: 1 1 190px;
+    min-width: 0;
+  }
+  app-data-table > .toolbar > .text-link {
+    order: 4;
+  }
+  app-data-table .data-table th,
+  app-data-table .data-table td {
+    padding: 15px 18px;
+  }
+}

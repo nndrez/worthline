@@ -1,0 +1,55 @@
+@let data = summary();
+<section class="panel allocation-panel">
+  <div class="section-heading">
+    <div>
+      <h2>{{ 'dashboard.allocation' | translate }}</h2>
+      <p>{{ 'dashboard.allocationHint' | translate }}</p>
+    </div>
+    <app-icon name="grid" />
+  </div>
+  <div class="donut" [class.donut-empty]="!data.allocationAvailable">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle
+        cx="100"
+        cy="100"
+        r="77"
+        pathLength="100"
+        fill="none"
+        stroke="var(--surface-alt)"
+        stroke-width="20"
+      />
+      @if (data.allocationAvailable) {
+        @for (group of data.allocation; track group.type) {
+          <circle
+            cx="100"
+            cy="100"
+            r="77"
+            pathLength="100"
+            fill="none"
+            [attr.stroke]="group.color"
+            stroke-width="20"
+            [attr.stroke-dasharray]="group.dash"
+            [attr.stroke-dashoffset]="group.offset"
+            transform="rotate(-90 100 100)"
+          />
+        }
+      }
+    </svg>
+    <div class="donut-center">
+      <span>{{ 'dashboard.wealth' | translate }}</span
+      ><strong>{{ data.total | money }}</strong>
+    </div>
+  </div>
+  @if (!data.allocationAvailable && data.total !== null) {
+    <p class="text-xs text-muted px-6 pb-4">{{ 'dashboard.allocationUnavailable' | translate }}</p>
+  }
+  <div class="allocation-legend">
+    @for (group of data.allocation; track group.type) {
+      <div>
+        <span class="legend-dot" [style.background]="group.color"></span
+        ><span>{{ 'types.' + group.type | translate }}</span
+        ><strong>{{ group.total | money }}</strong>
+      </div>
+    }
+  </div>
+</section>

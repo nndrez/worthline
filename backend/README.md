@@ -4,17 +4,38 @@ Java 21, Spring Boot, Spring Modulith, PostgreSQL and Flyway.
 
 ## Run
 
-Create a PostgreSQL database and provide these environment variables:
+Start PostgreSQL 18.6 with Docker Compose, then run the backend from this directory. Configuration lives in `src/main/resources/application.yaml` and uses these environment variables:
 
 | Variable | Default |
 | --- | --- |
 | `DB_URL` | `jdbc:postgresql://localhost:5432/worthline` |
 | `DB_USERNAME` | `worthline` |
 | `DB_PASSWORD` | Required |
+| `DB_NAME` | `worthline` |
+| `DB_PORT` | `5432` |
+
+Create a local `.env` from `.env.example` and replace the example password before the first start. The local `.env` is ignored by Git. If a `.env` already exists, keep its values:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+With `JAVA_HOME` pointing to JDK 21, run from this directory:
+
+```powershell
+docker compose up -d --wait
+.\mvnw.cmd spring-boot:run
+```
+
+Compose reads `.env` automatically; Spring imports it through `spring.config.import` as a properties file. Always start the backend with `backend/` as the working directory, including in IDE run configurations. Use simple `KEY=value` entries without `export` or surrounding quotes so both readers interpret them consistently. Existing shell environment variables take precedence; the `.env` file is optional when configuration is provided through the environment.
+
+`DB_NAME` and `DB_PORT` also configure the default JDBC URL; `DB_URL` overrides it when connecting to an existing database. Compose publishes PostgreSQL only on localhost and stores data in the named `postgres_data` volume, mounted at `/var/lib/postgresql` as required by PostgreSQL 18 images. Credentials initialize an empty volume; changing environment variables does not change credentials in an existing database.
+
+Use `docker compose stop` to stop PostgreSQL or `docker compose down` to remove the container while retaining its data. The image is pinned to the latest stable release verified on 2026-10-22 ([PostgreSQL versioning policy](https://www.postgresql.org/support/versioning/)).
 
 With `JAVA_HOME` pointing to JDK 21, run `./mvnw spring-boot:run` (`.\mvnw.cmd spring-boot:run` on Windows) from this directory. The API listens on port 8080. Flyway applies the schema; Hibernate only validates it. No financial data is seeded or imported from the reference workbook.
 
-Run `./mvnw test` to verify module boundaries, money precision, migrations and HTTP workflows. Integration tests require Docker and start their own disposable PostgreSQL 17 database. They use synthetic data and do not connect to the application database.
+Run `./mvnw test` to verify module boundaries, money precision, migrations and HTTP workflows. Integration tests require Docker and start their own disposable PostgreSQL 18.6 database, using the same image as Compose. They use synthetic data and do not connect to the application database.
 
 ## Modules and workflow
 

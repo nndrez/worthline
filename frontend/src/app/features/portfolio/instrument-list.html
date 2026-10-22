@@ -1,0 +1,139 @@
+<section class="page-heading">
+  <div>
+    <span class="eyebrow">{{ 'instruments.eyebrow' | translate }}</span>
+    <h1>{{ 'instruments.title' | translate }}</h1>
+    <p>{{ 'instruments.subtitle' | translate }}</p>
+  </div>
+  <div class="page-actions">
+    <button class="btn" (click)="edit(null)">
+      <app-icon name="plus" />{{ 'instruments.create' | translate }}
+    </button>
+  </div>
+</section>
+<app-data-table
+  [label]="'instruments.title' | translate"
+  [loading]="state().loading"
+  [error]="state().error"
+  [page]="state().data?.result.page ?? null"
+  [columns]="4"
+  (retry)="nav.reload()"
+  (pageChange)="nav.update({ page: $event })"
+>
+  <div tableToolbar class="toolbar">
+    <app-tabs
+      [items]="[
+        { path: '/portfolio', label: 'nav.portfolio' },
+        { path: '/investment-operations', label: 'nav.operations' },
+      ]"
+    />
+    <label class="search-field"
+      ><span class="sr-only">{{ 'common.search' | translate }}</span
+      ><app-icon name="search" /><input
+        uiInput
+        #nameSearch
+        type="search"
+        [placeholder]="'instruments.search' | translate"
+        [value]="nav.params().get('name') || ''"
+        (input)="nav.search('name', nameSearch.value)"
+    /></label>
+    <button class="text-link ml-auto" (click)="nav.clear()">
+      {{ 'common.clear' | translate }}
+    </button>
+  </div>
+
+  @if (state().data; as data) {
+    @if (data.result.content.length) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col" [attr.aria-sort]="sortDirection('name')">
+              <button class="sort-button" (click)="sort('name')">
+                {{ 'fields.name' | translate
+                }}<app-icon [name]="sortDirection('name') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col" [attr.aria-sort]="sortDirection('isin')">
+              <button class="sort-button" (click)="sort('isin')">
+                {{ 'fields.isin' | translate
+                }}<app-icon [name]="sortDirection('isin') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col" [attr.aria-sort]="sortDirection('ticker')">
+              <button class="sort-button" (click)="sort('ticker')">
+                {{ 'fields.ticker' | translate
+                }}<app-icon [name]="sortDirection('ticker') === 'ascending' ? 'up' : 'down'" />
+              </button>
+            </th>
+            <th scope="col" class="actions">
+              <span class="sr-only">{{ 'common.actions' | translate }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of data.result.content; track row.id) {
+            <tr>
+              <td>
+                <div class="flex items-center gap-3">
+                  <span class="account-icon"><app-icon name="chart" /></span>
+                  <div>
+                    <div class="row-name">{{ row.name }}</div>
+                    <div class="row-description">{{ row.code }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>{{ row.isin || '—' }}</td>
+              <td>{{ row.ticker || '—' }}</td>
+              <td class="actions">
+                <button
+                  class="icon-button"
+                  [attr.aria-label]="'common.edit' | translate"
+                  (click)="edit(row)"
+                >
+                  <app-icon name="edit" /></button
+                ><button
+                  class="icon-button"
+                  [attr.aria-label]="'common.delete' | translate"
+                  (click)="mutation.error.set(null); deleting.set(row)"
+                >
+                  <app-icon name="trash" />
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      @if (nav.params().get('name')) {
+        <app-empty-state
+          title="common.noMatches"
+          description="common.noMatchesDescription"
+          icon="search"
+          ><button class="btn btn-secondary btn-sm" (click)="nav.clear()">
+            {{ 'common.clear' | translate }}
+          </button></app-empty-state
+        >
+      } @else {
+        <app-empty-state
+          title="instruments.empty"
+          description="instruments.emptyDescription"
+          icon="chart"
+          ><button class="btn btn-sm" (click)="edit(null)">
+            <app-icon name="plus" />{{ 'instruments.create' | translate }}
+          </button></app-empty-state
+        >
+      }
+    }
+  }
+</app-data-table>
+@if (editorOpen()) {
+  <app-instrument-editor [initial]="editing()" (saved)="saved()" (closed)="editorOpen.set(false)" />
+}
+@if (deleting(); as row) {
+  <app-confirmation
+    [name]="row.name"
+    [busy]="mutation.busy()"
+    [error]="mutation.error()"
+    (cancelled)="deleting.set(null)"
+    (confirm)="confirmDelete()"
+  />
+}

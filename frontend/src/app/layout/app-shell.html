@@ -1,0 +1,43 @@
+<a class="skip-link" href="#main-content">{{ 'app.skip' | translate }}</a>
+<header class="app-header">
+  <div class="header-inner">
+    <a routerLink="/overview" class="brand" [attr.aria-label]="'app.name' | translate"
+      ><span class="brand-mark">w<span>↗</span></span
+      ><span>{{ 'app.name' | translate }}</span
+      ><span class="brand-dot">.</span></a
+    >
+    <nav class="main-nav" [attr.aria-label]="'app.personal' | translate">
+      <a routerLink="/overview" routerLinkActive="active"
+        ><app-icon name="grid" />{{ 'nav.overview' | translate }}</a
+      >
+      <a
+        routerLink="/accounts"
+        routerLinkActive="active"
+        [class.active]="router.url.startsWith('/balances')"
+        ><app-icon name="wallet" />{{ 'nav.accounts' | translate }}</a
+      >
+      <a routerLink="/transactions" routerLinkActive="active"
+        ><app-icon name="swap" />{{ 'nav.transactions' | translate }}</a
+      >
+      <a
+        routerLink="/portfolio"
+        routerLinkActive="active"
+        [class.active]="router.url.startsWith('/investment-operations')"
+        ><app-icon name="chart" />{{ 'nav.portfolio' | translate }}</a
+      >
+      <a routerLink="/categories" routerLinkActive="active"
+        ><app-icon name="tag" />{{ 'nav.categories' | translate }}</a
+      >
+    </nav>
+    <span class="personal-space"
+      ><span class="status-dot"></span>{{ 'app.personal' | translate }}</span
+    >
+  </div>
+</header>
+<main #contentMain id="main-content" tabindex="-1">
+  <div class="page-content"><router-outlet (activate)="resetContentScroll()" /></div>
+</main>
+<footer class="app-footer">
+  <span>{{ 'app.tagline' | translate }}</span
+  ><span>{{ 'app.dataNote' | translate }}</span>
+</footer>
