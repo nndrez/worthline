@@ -1,175 +1,72 @@
-.overview-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 2.15fr) minmax(300px, 1fr);
-  gap: 22px;
-  margin-bottom: 22px;
-}
-.bottom-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 2.15fr) minmax(300px, 1fr);
-  gap: 22px;
-}
-.accounts-preview td {
-  height: 65px;
-  font-size: 12px;
-  padding-top: 13px;
-  padding-bottom: 13px;
-}
-.account-name {
+:host {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 500;
-}
-.account-avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  font-size: 15px;
-  border: 1px solid var(--border);
-  background: var(--surface-alt);
-  border-radius: 8px;
-  color: var(--muted);
-}
-.missing-badge {
-  font-size: 11px;
-  color: var(--muted);
-  font-style: italic;
-}
-.completion-card {
-  background: var(--completion-bg);
-  border: 1px solid var(--completion-border);
-  border-radius: var(--radius);
-  padding: 26px;
-  display: flex;
+  flex: 1;
   flex-direction: column;
-  align-items: flex-start;
-}
-.completion-icon {
-  font-size: 24px;
-  display: flex;
-  color: var(--completion-accent);
-  margin-bottom: 20px;
-}
-.completion-card .eyebrow {
-  font-size: 8px;
-  letter-spacing: 1.3px;
-}
-.completion-card h2 {
-  font-size: 21px;
-  letter-spacing: -0.7px;
-  line-height: 1.4;
-  font-weight: 500;
-  margin-top: 9px;
-  max-width: 240px;
-}
-.completion-card p {
-  font-size: 11px;
-  line-height: 1.9;
-  color: var(--completion-text);
-  margin-top: 13px;
-}
-.completion-progress {
-  height: 4px;
-  border-radius: 5px;
-  background: var(--progress-track);
-  width: 100%;
-  margin-top: 23px;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
 }
-.completion-progress span {
-  display: block;
-  height: 100%;
-  background: var(--progress-fill);
-  border-radius: 5px;
-}
-.completion-label {
-  font-size: 10px;
-  color: var(--completion-text);
-  margin: 10px 0 22px;
-}
-.completion-card .btn {
-  margin-top: auto;
-  font-size: 11px;
-  width: 100%;
-  justify-content: space-between;
-  background: var(--completion-button);
-}
-.dashboard-loading {
+.dashboard-board {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 22px;
+  flex: 1;
+  min-height: 0;
+  gap: 14px;
+  grid-template-columns: minmax(290px, 0.85fr) minmax(0, 1.7fr);
+  grid-template-rows: minmax(180px, 0.85fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: 'metrics metrics' 'current wealth' 'allocation wealth';
 }
-.dashboard-loading > .panel {
-  min-height: 370px;
+.dashboard-panel,
+.metrics-grid {
+  min-height: 0;
+  min-width: 0;
 }
-.welcome {
-  padding: 65px 30px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+.wealth {
+  grid-area: wealth;
 }
-.welcome-icon {
-  font-size: 30px;
-  color: var(--accent);
-  display: flex;
-  margin-bottom: 24px;
+.allocation {
+  grid-area: allocation;
 }
-.welcome h2 {
-  font-size: 32px;
-  letter-spacing: -1px;
-  font-weight: 500;
-  margin-top: 12px;
+.current {
+  grid-area: current;
 }
-.welcome p {
-  max-width: 440px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.9;
-  margin: 16px 0 25px;
+.metrics-grid {
+  grid-area: metrics;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+app-panel-tabs {
+  display: none;
 }
 @media (max-width: 1000px) {
-  .overview-grid,
-  .bottom-grid {
-    grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr);
+  .dashboard-board {
+    grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.4fr);
   }
 }
-@media (max-width: 780px) {
-  .overview-grid,
-  .bottom-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 780px), (max-height: 650px) {
+  .dashboard-board {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 140px 38px minmax(0, 1fr);
+    grid-template-areas: 'metrics' 'tabs' 'panel';
+    gap: 10px;
   }
-  .completion-card p {
-    max-width: 440px;
+  .metrics-grid {
+    gap: 8px;
   }
-  .completion-card .btn {
-    max-width: 260px;
+  .dashboard-panel {
+    display: none;
+    grid-area: panel;
+  }
+  .dashboard-panel.is-active {
+    display: block;
+  }
+  app-panel-tabs {
+    display: block;
+    grid-area: tabs;
   }
 }
 @media (max-width: 500px) {
   .page-actions .btn {
-    font-size: 12px;
-  }
-  .welcome h2 {
-    font-size: 27px;
-  }
-}
-@media (max-width: 500px) {
-  .accounts-preview th:nth-child(2),
-  .accounts-preview td:nth-child(2) {
-    display: none;
-  }
-  .accounts-preview td,
-  .accounts-preview th {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-  .accounts-preview .account-name {
-    max-width: 155px;
-    white-space: normal;
-    line-height: 1.6;
+    font-size: 11px;
   }
 }

@@ -1,21 +1,13 @@
-<section class="page-heading">
-  <div>
-    <span class="eyebrow">{{ 'accounts.eyebrow' | translate }}</span>
-    <h1>{{ 'accounts.title' | translate }}</h1>
-    <p>{{ 'accounts.subtitle' | translate }}</p>
-  </div>
-  <div class="page-actions">
-    <button class="btn" (click)="edit(null)">
-      <app-icon name="plus" />{{ 'accounts.create' | translate }}
-    </button>
-  </div>
-</section>
+<app-page-header title="accounts.title">
+  <button class="btn" (click)="edit(null)">
+    <app-icon name="plus" />{{ 'accounts.create' | translate }}
+  </button>
+</app-page-header>
 <app-data-table
   [label]="'accounts.title' | translate"
   [loading]="state().loading"
   [error]="state().error"
   [page]="state().data?.result.page ?? null"
-  [columns]="4"
   (retry)="nav.reload()"
   (pageChange)="nav.update({ page: $event })"
 >
@@ -79,7 +71,7 @@
         </thead>
         <tbody>
           @for (row of data.result.content; track row.id) {
-            <tr>
+            <tr appTableRow (rowActivated)="edit(row)">
               <td>
                 <div class="flex items-center gap-3">
                   <span class="account-icon"
@@ -120,19 +112,13 @@
       </table>
     } @else {
       @if (nav.params().get('name') || nav.params().get('type')) {
-        <app-empty-state
-          title="common.noMatches"
-          description="common.noMatchesDescription"
-          icon="search"
+        <app-empty-state title="common.noMatches" icon="search"
           ><button class="btn btn-secondary btn-sm" (click)="nav.clear()">
             {{ 'common.clear' | translate }}
           </button></app-empty-state
         >
       } @else {
-        <app-empty-state
-          title="accounts.empty"
-          description="accounts.emptyDescription"
-          icon="wallet"
+        <app-empty-state title="accounts.empty" icon="wallet"
           ><button class="btn btn-sm" (click)="edit(null)">
             <app-icon name="plus" />{{ 'accounts.create' | translate }}
           </button></app-empty-state

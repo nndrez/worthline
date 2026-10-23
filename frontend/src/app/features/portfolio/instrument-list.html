@@ -1,21 +1,13 @@
-<section class="page-heading">
-  <div>
-    <span class="eyebrow">{{ 'instruments.eyebrow' | translate }}</span>
-    <h1>{{ 'instruments.title' | translate }}</h1>
-    <p>{{ 'instruments.subtitle' | translate }}</p>
-  </div>
-  <div class="page-actions">
-    <button class="btn" (click)="edit(null)">
-      <app-icon name="plus" />{{ 'instruments.create' | translate }}
-    </button>
-  </div>
-</section>
+<app-page-header title="instruments.title">
+  <button class="btn" (click)="edit(null)">
+    <app-icon name="plus" />{{ 'instruments.create' | translate }}
+  </button>
+</app-page-header>
 <app-data-table
   [label]="'instruments.title' | translate"
   [loading]="state().loading"
   [error]="state().error"
   [page]="state().data?.result.page ?? null"
-  [columns]="4"
   (retry)="nav.reload()"
   (pageChange)="nav.update({ page: $event })"
 >
@@ -71,7 +63,7 @@
         </thead>
         <tbody>
           @for (row of data.result.content; track row.id) {
-            <tr>
+            <tr appTableRow (rowActivated)="viewing.set(row)">
               <td>
                 <div class="flex items-center gap-3">
                   <span class="account-icon"><app-icon name="chart" /></span>
@@ -104,19 +96,13 @@
       </table>
     } @else {
       @if (nav.params().get('name')) {
-        <app-empty-state
-          title="common.noMatches"
-          description="common.noMatchesDescription"
-          icon="search"
+        <app-empty-state title="common.noMatches" icon="search"
           ><button class="btn btn-secondary btn-sm" (click)="nav.clear()">
             {{ 'common.clear' | translate }}
           </button></app-empty-state
         >
       } @else {
-        <app-empty-state
-          title="instruments.empty"
-          description="instruments.emptyDescription"
-          icon="chart"
+        <app-empty-state title="instruments.empty" icon="chart"
           ><button class="btn btn-sm" (click)="edit(null)">
             <app-icon name="plus" />{{ 'instruments.create' | translate }}
           </button></app-empty-state
@@ -135,5 +121,13 @@
     [error]="mutation.error()"
     (cancelled)="deleting.set(null)"
     (confirm)="confirmDelete()"
+  />
+}
+
+@if (viewing(); as row) {
+  <app-instrument-summary
+    [id]="row.id"
+    (closed)="viewing.set(null)"
+    (editRequested)="viewing.set(null); edit(row)"
   />
 }

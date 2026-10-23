@@ -1,21 +1,13 @@
-<section class="page-heading">
-  <div>
-    <span class="eyebrow">{{ 'transactions.eyebrow' | translate }}</span>
-    <h1>{{ 'transactions.title' | translate }}</h1>
-    <p>{{ 'transactions.subtitle' | translate }}</p>
-  </div>
-  <div class="page-actions">
-    <button class="btn" (click)="edit(null)">
-      <app-icon name="plus" />{{ 'transactions.create' | translate }}
-    </button>
-  </div>
-</section>
+<app-page-header title="transactions.title">
+  <button class="btn" (click)="edit(null)">
+    <app-icon name="plus" />{{ 'transactions.create' | translate }}
+  </button>
+</app-page-header>
 <app-data-table
   [label]="'transactions.title' | translate"
   [loading]="state().loading"
   [error]="state().error"
   [page]="state().data?.result.page ?? null"
-  [columns]="6"
   (retry)="nav.reload()"
   (pageChange)="nav.update({ page: $event })"
 >
@@ -87,7 +79,7 @@
         </thead>
         <tbody>
           @for (row of data.result.content; track row.id) {
-            <tr>
+            <tr appTableRow (rowActivated)="edit(row)">
               <td>
                 <div class="row-name">{{ row.description }}</div>
                 @if (row.tag) {
@@ -133,19 +125,13 @@
         nav.params().get('to') ||
         nav.params().get('categoryId')
       ) {
-        <app-empty-state
-          title="common.noMatches"
-          description="common.noMatchesDescription"
-          icon="search"
+        <app-empty-state title="common.noMatches" icon="search"
           ><button class="btn btn-secondary btn-sm" (click)="nav.clear()">
             {{ 'common.clear' | translate }}
           </button></app-empty-state
         >
       } @else {
-        <app-empty-state
-          title="transactions.empty"
-          description="transactions.emptyDescription"
-          icon="swap"
+        <app-empty-state title="transactions.empty" icon="swap"
           ><button class="btn btn-sm" (click)="edit(null)">
             <app-icon name="plus" />{{ 'transactions.create' | translate }}
           </button></app-empty-state

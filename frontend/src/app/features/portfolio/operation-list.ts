@@ -1,3 +1,5 @@
+import { TableRow } from '../../shared/ui/table-row';
+import { PageHeader } from '../../shared/ui/page-header';
 import { retainTableData } from '../../core/http/retain-table-data';
 import { DataTable } from '../../shared/ui/data-table';
 import { Tabs } from '../../shared/ui/tabs';
@@ -25,6 +27,8 @@ import { displayDate } from '../../shared/utils/dates';
 @Component({
   host: { class: 'list-page' },
   imports: [
+    TableRow,
+    PageHeader,
     DataTable,
     Tabs,
     Chip,

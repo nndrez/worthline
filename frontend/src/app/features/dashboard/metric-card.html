@@ -1,0 +1,91 @@
+<app-card
+  [fill]="true"
+  [scrollable]="false"
+  [empty]="empty()"
+  emptyTitle="dashboard.noTransactions"
+  emptyIcon="swap"
+  [label]="config().label | translate"
+  [loading]="resource.state().loading"
+  [error]="resource.state().error"
+  [bodyHeight]="110"
+  (retry)="resource.reload()"
+>
+  <a
+    cardEmptyActions
+    class="text-link"
+    routerLink="/transactions"
+    [queryParams]="{ from: month() + '-01', to: monthEnd(month()) }"
+    >{{ 'dashboard.viewTransactions' | translate }}</a
+  >
+  <div cardHeader class="metric-heading">
+    <span class="metric-icon"><app-icon [name]="config().icon" /></span
+    ><span>{{ config().label | translate }}</span>
+    <button
+      class="chart-action"
+      type="button"
+      (click)="detailsOpen.set(true)"
+      [attr.aria-label]="
+        ('dashboard.annualDetail' | translate) + ': ' + (config().label | translate)
+      "
+    >
+      <app-icon name="chart" />
+    </button>
+    @if (kind() !== 'cash-flow') {
+      <a
+        routerLink="/transactions"
+        [queryParams]="{
+          type: kind() === 'income' ? 'INCOME' : 'EXPENSE',
+          from: month() + '-01',
+          to: monthEnd(month()),
+        }"
+        [attr.aria-label]="'dashboard.viewTransactions' | translate"
+        ><app-icon name="arrow"
+      /></a>
+    }
+  </div>
+  @if (resource.state().data; as data) {
+    <p class="metric-value">{{ data.amount | money }}</p>
+    <p class="metric-hint">
+      {{ monthLabel(month()) }}
+      @if (data.transactionCount === 0) {
+        · {{ 'dashboard.noTransactions' | translate }}
+      }
+    </p>
+    @if (data.comparison; as comparison) {
+      <app-month-comparison
+        class="metric-comparison"
+        [label]="config().label | translate"
+        [selectedMonth]="month()"
+        [selectedAmount]="data.transactionCount ? data.amount : null"
+        [month]="comparison.month"
+        [amount]="comparison.transactionCount ? comparison.amount : null"
+        [difference]="comparison.difference"
+        [inProgress]="true"
+      />
+    }
+    <app-time-series-chart
+      class="annual-chart"
+      [compact]="true"
+      [points]="points()"
+      [series]="series()"
+      [month]="month()"
+      [label]="(config().label | translate) + ' ' + year()"
+      (monthSelected)="monthSelected.emit($event)"
+    />
+  }
+</app-card>
+
+@if (detailsOpen()) {
+  <app-chart-dialog
+    heading="dashboard.annualDetail"
+    [subtitle]="(config().label | translate) + ' · ' + year()"
+    [points]="points()"
+    [series]="series()"
+    [month]="month()"
+    [loading]="resource.state().loading"
+    [error]="resource.state().error"
+    (retry)="resource.reload()"
+    (closed)="detailsOpen.set(false)"
+    (monthSelected)="monthSelected.emit($event)"
+  />
+}

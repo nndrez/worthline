@@ -1,0 +1,30 @@
+/* Shared scrollbar treatment from Insula, kept independent of page/component styles. */
+:root {
+  --scrollbar-size: 6px;
+  --scrollbar-thumb: rgb(161 161 170 / 30%);
+  --scrollbar-thumb-hover: rgb(161 161 170 / 50%);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+@media (forced-colors: active) {
+  * {
+    scrollbar-color: auto;
+  }
+}

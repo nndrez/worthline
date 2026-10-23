@@ -1,0 +1,40 @@
+<app-card
+  [fill]="true"
+  [scrollable]="false"
+  [empty]="resource.state().data?.accounts?.length === 0"
+  emptyTitle="accounts.empty"
+  [label]="title() | translate: { month: monthLabel(month()) }"
+  [loading]="resource.state().loading"
+  [error]="resource.state().error"
+  (retry)="resource.reload()"
+>
+  <div cardHeader class="situation-heading">
+    <h2>{{ title() | translate: { month: monthLabel(month()) } }}</h2>
+  </div>
+  <a cardEmptyActions class="btn btn-secondary btn-sm" routerLink="/accounts">{{
+    'dashboard.startAction' | translate
+  }}</a>
+  @if (resource.state().data; as data) {
+    <div class="situation-total">
+      <strong>{{ data.total | money }}</strong>
+      @if (data.missing) {
+        <span>{{ 'dashboard.currentMissing' | translate: { count: data.missing } }}</span>
+      }
+    </div>
+    @if (data.comparison; as comparison) {
+      <app-month-comparison
+        class="situation-comparison"
+        [label]="'dashboard.current' | translate"
+        [selectedMonth]="month()"
+        [selectedAmount]="data.total"
+        [month]="comparison.month"
+        [amount]="comparison.amount"
+        [difference]="comparison.difference"
+      />
+    }
+    <app-summary-list
+      [rows]="rows()"
+      [label]="title() | translate: { month: monthLabel(month()) }"
+    />
+  }
+</app-card>

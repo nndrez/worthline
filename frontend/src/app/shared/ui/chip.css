@@ -12,9 +12,9 @@
   white-space: nowrap;
 }
 :host(.positive-chip) {
-  background: var(--accent-light);
-  color: var(--accent);
-  border-color: var(--savings-border);
+  background: var(--positive-bg);
+  color: var(--positive);
+  border-color: var(--positive-border);
 }
 :host(.negative-chip) {
   background: var(--danger-bg);

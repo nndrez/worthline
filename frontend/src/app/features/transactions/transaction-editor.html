@@ -1,6 +1,6 @@
 <app-dialog-frame
+  size="form"
   [heading]="initial() ? 'transactions.edit' : 'transactions.create'"
-  description="transactions.dialogDescription"
   [busy]="mutation.busy()"
   (closed)="closed.emit()"
 >

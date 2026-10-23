@@ -1,0 +1,44 @@
+<button
+  type="button"
+  class="comparison-trigger"
+  aria-haspopup="dialog"
+  [attr.aria-label]="('comparison.open' | translate) + (label() ? ': ' + label() : '')"
+  (click)="open.set(true)"
+>
+  <app-icon name="swap" /><span class="full-label">{{ 'comparison.open' | translate }}</span
+  ><span class="short-label">{{ 'comparison.shortOpen' | translate }}</span>
+</button>
+@if (open()) {
+  <app-dialog-frame size="form" heading="comparison.title" (closed)="open.set(false)">
+    @if (label()) {
+      <h3>{{ label() }}</h3>
+    }
+    <div class="comparison-periods">
+      <app-card [label]="'comparison.selected' | translate" [bodyHeight]="120" [scrollable]="false">
+        <div class="period-value">
+          <span class="period-label">{{ 'comparison.selected' | translate }}</span>
+          <strong>{{ selectedAmount() | money }}</strong>
+          <span class="period-date">{{ monthLabel(selectedMonth()) }}</span>
+        </div>
+      </app-card>
+      <app-card [label]="'comparison.today' | translate" [bodyHeight]="120" [scrollable]="false">
+        <div class="period-value">
+          <span class="period-label">{{ 'comparison.today' | translate }}</span>
+          <strong>{{ amount() | money }}</strong>
+          <span class="period-date">{{ monthLabel(month()) }}</span>
+        </div>
+      </app-card>
+    </div>
+    <div class="comparison-result">
+      @if (difference() !== null) {
+        <span>{{ 'comparison.delta' | translate }}</span
+        ><strong>{{ difference() | money }}</strong>
+      } @else {
+        <span>{{ 'comparison.insufficient' | translate }}</span>
+      }
+    </div>
+    @if (inProgress()) {
+      <p class="comparison-note">{{ 'comparison.currentMonthNote' | translate }}</p>
+    }
+  </app-dialog-frame>
+}

@@ -1,21 +1,13 @@
-<section class="page-heading">
-  <div>
-    <span class="eyebrow">{{ 'categories.eyebrow' | translate }}</span>
-    <h1>{{ 'categories.title' | translate }}</h1>
-    <p>{{ 'categories.subtitle' | translate }}</p>
-  </div>
-  <div class="page-actions">
-    <button class="btn" (click)="edit(null)">
-      <app-icon name="plus" />{{ 'categories.create' | translate }}
-    </button>
-  </div>
-</section>
+<app-page-header title="categories.title">
+  <button class="btn" (click)="edit(null)">
+    <app-icon name="plus" />{{ 'categories.create' | translate }}
+  </button>
+</app-page-header>
 <app-data-table
   [label]="'categories.title' | translate"
   [loading]="state().loading"
   [error]="state().error"
   [page]="state().data?.result.page ?? null"
-  [columns]="4"
   (retry)="nav.reload()"
   (pageChange)="nav.update({ page: $event })"
 >
@@ -72,7 +64,7 @@
         </thead>
         <tbody>
           @for (row of data.result.content; track row.id) {
-            <tr>
+            <tr appTableRow (rowActivated)="edit(row)">
               <td>
                 <span class="row-name">{{ row.name }}</span>
               </td>
@@ -101,19 +93,13 @@
       </table>
     } @else {
       @if (nav.params().get('name') || nav.params().get('type')) {
-        <app-empty-state
-          title="common.noMatches"
-          description="common.noMatchesDescription"
-          icon="search"
+        <app-empty-state title="common.noMatches" icon="search"
           ><button class="btn btn-secondary btn-sm" (click)="nav.clear()">
             {{ 'common.clear' | translate }}
           </button></app-empty-state
         >
       } @else {
-        <app-empty-state
-          title="categories.empty"
-          description="categories.emptyDescription"
-          icon="tag"
+        <app-empty-state title="categories.empty" icon="tag"
           ><button class="btn btn-sm" (click)="edit(null)">
             <app-icon name="plus" />{{ 'categories.create' | translate }}
           </button></app-empty-state

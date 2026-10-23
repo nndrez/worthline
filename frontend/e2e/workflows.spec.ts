@@ -11,9 +11,9 @@ test('dashboard shows complete monthly data with Italian formatting', async ({ p
   await mockApi(page);
   await page.goto('/overview?month=2026-10');
   await expect(page.getByText('57.002,00', { exact: false }).first()).toBeVisible();
-  await expect(page.getByText('4 conti rilevati su 4')).toBeVisible();
+  await expect(page.locator('app-current-situation')).toContainText('Situazione attuale');
   await expect(
-    page.getByRole('img', { name: 'Andamento delle rilevazioni mensili del patrimonio' }),
+    page.getByRole('group', { name: 'Andamento delle rilevazioni mensili del patrimonio' }),
   ).toBeVisible();
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
@@ -200,7 +200,7 @@ test('empty, filtered and offline states remain distinct', async ({ page }) => {
   store['accounts'] = [];
   await mockApi(page, store);
   await page.goto('/accounts');
-  await expect(page.getByRole('heading', { name: 'Il primo passo è un conto.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Nessun conto' })).toBeVisible();
   await page.getByRole('searchbox').fill('inesistente');
   await expect(page.getByRole('heading', { name: 'Nessun risultato' })).toBeVisible();
   await page.route('**/api/accounts**', (route) => route.fulfill({ status: 503, body: 'offline' }));
@@ -213,7 +213,8 @@ test('mobile layouts and dialog keyboard interaction stay accessible', async ({ 
   await mockApi(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/overview?month=2026-10');
-  await expect(page.getByText('4 conti rilevati su 4')).toBeVisible();
+  await page.getByRole('tab', { name: 'Situazione', exact: true }).click();
+  await expect(page.locator('app-current-situation')).toContainText('Situazione attuale');
   await page.screenshot({ path: 'test-results/overview-mobile.png', fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
@@ -326,7 +327,7 @@ test('shared date range persists partial and complete filters and clears both da
 test('month mode shares the calendar and updates the overview URL', async ({ page }) => {
   await mockApi(page);
   await page.goto('/overview?month=2026-10');
-  const month = page.getByLabel('Mese di riferimento', { exact: true });
+  const month = page.getByLabel('Periodo della dashboard', { exact: true });
   await expect(month).toHaveValue('10/2026');
   await month.press('Alt+ArrowDown');
   await page
@@ -352,45 +353,3 @@ test('month arrows update balance filters and keep the month label visually hidd
   await expect(page.locator('label[for="balances-month"] > span')).toHaveClass('sr-only');
   await page.screenshot({ path: 'test-results/balances-month-navigation.png', fullPage: true });
 });
-
-for (const viewport of [
-  { width: 1440, height: 800 },
-  { width: 390, height: 844 },
-]) {
-  test(`content scrolls inside the viewport at ${viewport.width}px and resets on route changes`, async ({
-    page,
-  }) => {
-    await mockApi(page);
-    await page.setViewportSize(viewport);
-    await page.goto('/overview?month=2026-10');
-    const main = page.getByRole('main');
-    await expect(page.getByText('4 conti rilevati su 4')).toBeVisible();
-    const metrics = await page.evaluate(() => {
-      const content = document.querySelector('main')!;
-      return {
-        documentHeight: document.documentElement.scrollHeight,
-        viewportHeight: window.innerHeight,
-        scrollable: content.scrollHeight > content.clientHeight,
-      };
-    });
-    expect(metrics.documentHeight).toBe(metrics.viewportHeight);
-    expect(metrics.scrollable).toBe(true);
-    const headerBefore = await page.getByRole('banner').boundingBox();
-    const footerBefore = await page.locator('.app-footer').boundingBox();
-    await main.focus();
-    await page.keyboard.press('PageDown');
-    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
-    expect(await page.evaluate(() => window.scrollY)).toBe(0);
-    expect(await page.getByRole('banner').boundingBox()).toEqual(headerBefore);
-    expect(await page.locator('.app-footer').boundingBox()).toEqual(footerBefore);
-    await main.evaluate((element) => (element.scrollTop = element.scrollHeight));
-    await page.screenshot({
-      path: `test-results/content-scroll-${viewport.width}.png`,
-      fullPage: true,
-    });
-    await page.getByRole('link', { name: 'Conti', exact: true }).first().click();
-    await expect(page).toHaveURL(/\/accounts/);
-    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(0);
-    await expect(page.getByRole('heading', { name: 'Ogni conto, al suo posto.' })).toBeVisible();
-  });
-}

@@ -12,10 +12,10 @@ export class UiMotion {
     const step = parseFloat(style.getPropertyValue('--motion-row-delay'));
     const limit = parseFloat(style.getPropertyValue('--motion-row-delay-limit'));
     const easing = style.getPropertyValue('--motion-easing').trim();
-    const rows = [...viewport.querySelectorAll<HTMLElement>('.data-table tbody tr')];
+    const rows = [...viewport.querySelectorAll<HTMLElement>('.data-table tbody tr, [data-ui-row]')];
     const targets = rows.length
       ? rows
-      : [...viewport.querySelectorAll<HTMLElement>('app-empty-state, app-notice')];
+      : [...viewport.querySelectorAll<HTMLElement>('app-empty-state, app-error-state')];
     const animations = targets.map((element, index) =>
       element.animate(
         [

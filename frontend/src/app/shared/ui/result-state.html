@@ -1,0 +1,13 @@
+<div class="result-icon"><app-icon [name]="icon()" /></div>
+<div class="result-copy">
+  <h3>{{ title() | translate }}</h3>
+  @if (message()) {
+    <p>{{ message() }}</p>
+  } @else if (description()) {
+    <p>{{ description() | translate }}</p>
+  }
+  @if (reference()) {
+    <small>{{ 'common.reference' | translate }}: {{ reference() }}</small>
+  }
+</div>
+<div class="result-actions"><ng-content /></div>

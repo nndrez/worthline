@@ -1,3 +1,5 @@
+import { TableRow } from '../../shared/ui/table-row';
+import { PageHeader } from '../../shared/ui/page-header';
 import { retainTableData } from '../../core/http/retain-table-data';
 import { DataTable } from '../../shared/ui/data-table';
 import { Chip } from '../../shared/ui/chip';
@@ -22,6 +24,8 @@ import { Confirmation } from '../../shared/ui/confirmation';
 @Component({
   host: { class: 'list-page' },
   imports: [
+    TableRow,
+    PageHeader,
     DataTable,
     Chip,
     UiSelect,

@@ -1,0 +1,39 @@
+:host {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.summary-name {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+.summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.summary-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: normal;
+}
+.summary-copy > span {
+  overflow-wrap: anywhere;
+}
+small {
+  font-size: 10px;
+  color: var(--muted);
+}

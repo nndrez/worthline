@@ -6,7 +6,11 @@ import { Icon } from './icon';
   selector: 'app-pagination',
   imports: [TranslatePipe, Icon],
   template: ` @if (page(); as meta) {
-    <nav class="pagination" [attr.aria-label]="'common.pagination' | translate">
+    <nav
+      class="pagination"
+      [class.is-compact]="compact()"
+      [attr.aria-label]="'common.pagination' | translate"
+    >
       <span>{{
         (meta.totalElements === 1 ? 'common.result' : 'common.results')
           | translate: { count: meta.totalElements }
@@ -35,11 +39,12 @@ import { Icon } from './icon';
     </nav>
   }`,
   styles:
-    '.pagination{padding:18px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px;color:var(--muted)}@media(max-width:500px){.pagination{padding:16px;flex-wrap:wrap}}',
+    '.pagination.is-compact{padding:8px 16px;font-size:10px}.pagination.is-compact .icon-button{width:28px;height:28px;font-size:13px}.pagination{padding:18px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px;color:var(--muted)}@media(max-width:500px){.pagination{padding:16px;flex-wrap:wrap}}',
 })
 export class Pagination {
   readonly page = input<PageMetadata | null>(null);
   readonly disabled = input(false);
+  readonly compact = input(false);
   readonly pageChange = output<number>();
   protected readonly index = pageIndex;
 }

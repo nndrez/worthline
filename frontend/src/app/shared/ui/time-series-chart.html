@@ -1,0 +1,133 @@
+<app-chart-viewport [class.compact]="compact()">
+  @if (graph(); as graph) {
+    @if (activePoint(); as point) {
+      @if (tooltipAnchor(); as anchor) {
+        <app-chart-tooltip
+          [anchor]="anchor"
+          [label]="monthLabel(point.month)"
+          [rows]="tooltipRows()"
+          [detail]="point.detail ?? ''"
+        />
+      }
+    }
+    <svg
+      #plot
+      [attr.viewBox]="'0 0 ' + graph.width + ' ' + graph.height"
+      role="group"
+      [attr.aria-label]="label()"
+      (keydown.escape)="clearHighlight()"
+    >
+      <defs>
+        @for (line of graph.lines; track line.key) {
+          <linearGradient [id]="chartId + '-' + line.key" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" [attr.stop-color]="line.color" stop-opacity=".3" />
+            <stop offset="100%" [attr.stop-color]="line.color" stop-opacity=".025" />
+          </linearGradient>
+        }
+      </defs>
+      @for (line of graph.lines; track line.key) {
+        @for (area of line.areas; track $index) {
+          <path
+            class="series-area"
+            [attr.d]="area"
+            [attr.fill]="'url(#' + chartId + '-' + line.key + ')'"
+          />
+        }
+      }
+      @for (tick of graph.ticks; track tick.y) {
+        <line
+          [attr.x1]="graph.left"
+          [attr.x2]="graph.width - graph.right"
+          [attr.y1]="tick.y"
+          [attr.y2]="tick.y"
+          class="grid-line"
+        />
+        @if (!compact()) {
+          <text x="0" [attr.y]="tick.y + 4" class="axis-label">{{ tick.label }}</text>
+        }
+      }
+      @for (line of graph.lines; track line.key) {
+        @for (segment of line.segments; track $index) {
+          <path
+            [attr.d]="segment"
+            fill="none"
+            [attr.stroke]="line.color"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        }
+      }
+      @for (point of graph.points; track point.month) {
+        <g
+          class="chart-point"
+          [class.is-current]="point.month === month()"
+          [class.is-highlighted]="point.month === activeMonth()"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="pointLabel(point)"
+          (pointerenter)="select(point, $event)"
+          (pointermove)="select(point, $event)"
+          (pointerleave)="clearHighlight()"
+          (focus)="select(point, $event)"
+          (blur)="clearHighlight()"
+          (click)="activate(point)"
+          (keydown.enter)="activate(point)"
+          (keydown.space)="$event.preventDefault(); activate(point)"
+          (keydown.arrowleft)="move($event, -1)"
+          (keydown.arrowright)="move($event, 1)"
+        >
+          <rect
+            [attr.x]="point.x - graph.step / 2"
+            [attr.y]="graph.top"
+            [attr.width]="graph.step"
+            [attr.height]="graph.bottom - graph.top + 24"
+            fill="transparent"
+          />
+          @if (activeMonth() === point.month) {
+            <line
+              [attr.x1]="point.x"
+              [attr.x2]="point.x"
+              [attr.y1]="graph.top"
+              [attr.y2]="graph.bottom"
+              class="guide"
+            />
+          }
+          @for (dot of point.dots; track dot.key) {
+            @if (dot.y !== null) {
+              <circle
+                [attr.cx]="point.x"
+                [attr.cy]="dot.y"
+                [attr.r]="activeMonth() === point.month ? 4.5 : 2.5"
+                fill="var(--surface)"
+                [attr.stroke]="dot.color"
+                stroke-width="2"
+              />
+            }
+          }
+          <text
+            [attr.x]="point.x"
+            [attr.y]="graph.height - 6"
+            text-anchor="middle"
+            class="axis-label"
+          >
+            {{ point.label }}
+          </text>
+        </g>
+      }
+    </svg>
+  }
+</app-chart-viewport>
+@if (series().length > 1) {
+  <div class="chart-legend" [attr.aria-label]="'common.chartSeries' | translate">
+    @for (line of series(); track line.key) {
+      <button
+        type="button"
+        [attr.aria-pressed]="!hidden().includes(line.key)"
+        (click)="toggle(line.key)"
+      >
+        <i [style.background]="line.color"></i>{{ line.label }}
+      </button>
+    }
+  </div>
+}

@@ -1,0 +1,29 @@
+<app-dialog-frame size="form" heading="instruments.summary" (closed)="closed.emit()">
+  <app-card
+    [label]="'instruments.summary' | translate"
+    [loading]="state().loading"
+    [error]="state().error"
+    [bodyHeight]="460"
+    (retry)="reload()"
+  >
+    @if (state().data; as data) {
+      <div class="summary-content">
+        <h3>{{ data.instrument.name }}</h3>
+        <app-detail-fields [fields]="fields()" />
+        <app-summary-list [rows]="rows()" [label]="'instruments.operationsSummary' | translate" />
+        <p class="row-description">
+          {{ 'instruments.recordedOperations' | translate: { count: data.operationCount } }}
+        </p>
+      </div>
+    }
+  </app-card>
+  <div class="dialog-actions">
+    <a
+      class="btn btn-secondary"
+      routerLink="/investment-operations"
+      [queryParams]="{ instrumentId: id() }"
+      >{{ 'nav.operations' | translate }}</a
+    >
+    <button class="btn" (click)="editRequested.emit()">{{ 'common.edit' | translate }}</button>
+  </div>
+</app-dialog-frame>

@@ -83,7 +83,7 @@ it.andrea.worthline
 
 - Keep controllers thin: parse/validate HTTP input, delegate to a module service, and return a response DTO. Do not put business calculations or persistence logic in controllers.
 - Use standard resource-oriented REST semantics and correct status codes. For creates, return 201 and a `Location` header; for successful deletes without a body, return 204.
-- Every collection endpoint uses a search criteria record, composable JPA Specifications, `JpaSpecificationExecutor` and Spring Data `Pageable`. Return `PageResponse` with `content` and `page` metadata, following Insula. Do not add unpaginated list endpoints. Request pages are zero-based; response `currentPage` is one-based. Append UUID ordering to keep pagination stable.
+- Every collection endpoint uses a search criteria record, composable JPA Specifications, `JpaSpecificationExecutor` and Spring Data `Pageable`. Return `PageResponse` with `content` and `page` metadata, following Insula. Do not add unpaginated CRUD list endpoints. The dashboard current-situation document is an explicit user-requested exception: return all account valuations as of the selected month in one response. Request pages are zero-based; response `currentPage` is one-based. Append UUID ordering to keep pagination stable.
 - Authentication and authorization must not be evaluated or proposed as part of ordinary implementation work; the user will decide and plan them separately.
 - Do not log financial descriptions or full request bodies.
 - Keep secrets and real financial data out of source control, demo seeds, logs, and exception messages. Use environment variables/local ignored configuration for secrets.

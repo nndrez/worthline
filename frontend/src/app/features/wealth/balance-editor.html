@@ -1,6 +1,6 @@
 <app-dialog-frame
+  size="form"
   [heading]="initial() ? 'balances.edit' : 'balances.create'"
-  description="balances.dialogDescription"
   [busy]="mutation.busy()"
   (closed)="closed.emit()"
 >
@@ -41,10 +41,8 @@
         <app-field-error
           [visible]="(attempted() || entry.amount().touched()) && entry.amount().invalid()"
         />
-        <span class="field-hint">{{ 'balances.amountHint' | translate }}</span>
       </div>
     </fieldset>
-    <p class="inline-note mt-5">{{ 'balances.dateHint' | translate }}</p>
     <app-notice class="mt-4" [error]="options().error" />
     @if (!options().loading && !options().error && !choices().length) {
       <p class="inline-note mt-4">{{ 'balances.accountRequired' | translate }}</p>

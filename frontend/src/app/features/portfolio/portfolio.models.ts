@@ -32,3 +32,13 @@ export interface OperationRequest {
   amount: string;
   notes: string | null;
 }
+
+export interface InstrumentSummary {
+  instrument: Instrument;
+  currency: 'EUR';
+  operationCount: number;
+  purchases: DecimalValue;
+  sales: DecimalValue;
+  dividends: DecimalValue;
+  quantity: DecimalValue;
+}

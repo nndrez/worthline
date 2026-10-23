@@ -33,7 +33,7 @@ for (const viewport of [
     await expect(table).toHaveAttribute('aria-busy', 'false');
     await finishPageEntry(page);
     const scroll = table.getByRole('region');
-    const heading = page.getByRole('heading', { name: 'Ogni conto, al suo posto.' });
+    const heading = page.getByRole('heading', { name: 'Conti' });
     const toolbar = table.locator('.toolbar');
     const pager = table.getByRole('navigation', { name: 'Paginazione' });
     const header = table.locator('th').first();
@@ -106,7 +106,7 @@ test('pagination retains rows and geometry during loading, disables stale action
   await expect(table.getByText('Pagina 2 di 3')).toBeVisible();
 });
 
-test('initial load has a stable skeleton and errors replace old rows without becoming empty results', async ({
+test('initial load has a shared spinner and errors replace old rows without becoming empty results', async ({
   page,
 }) => {
   await mockApi(page, manyAccounts());
@@ -128,13 +128,13 @@ test('initial load has a stable skeleton and errors replace old rows without bec
   });
   await page.goto('/accounts');
   const table = page.locator('app-data-table');
-  await expect(table.locator('.table-skeleton')).toBeVisible();
+  await expect(table.locator('app-loading-state ui-spinner')).toBeVisible();
   await finishPageEntry(page);
   const bounds = await table.boundingBox();
   await page.screenshot({ path: 'test-results/table-skeleton.png', fullPage: true });
   release();
   await expect(table).toHaveAttribute('aria-busy', 'false');
-  await expect(table.locator('.table-skeleton')).toHaveCount(0);
+  await expect(table.locator('app-loading-state')).toHaveCount(0);
   expect(await table.boundingBox()).toEqual(bounds);
   await table.getByRole('button', { name: 'Pagina successiva', exact: true }).click();
   await expect(table.getByRole('alert')).toContainText('Non riusciamo a raggiungere i tuoi dati');

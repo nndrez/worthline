@@ -1,6 +1,6 @@
 <app-dialog-frame
+  size="form"
   [heading]="initial() ? 'instruments.edit' : 'instruments.create'"
-  description="instruments.dialogDescription"
   [busy]="mutation.busy()"
   (closed)="closed.emit()"
 >

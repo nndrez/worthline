@@ -25,6 +25,13 @@ public class InstrumentService {
 
     public InstrumentResponse get(UUID id) { return mapper.response(require(id)); }
 
+    public InstrumentSummary summary(UUID id) {
+        InstrumentResponse instrument = get(id);
+        OperationRepository.Totals totals = operations.totals(id);
+        return new InstrumentSummary(instrument, it.andrea.worthline.core.Currency.EUR, totals.getOperationCount(),
+                totals.getPurchases(), totals.getSales(), totals.getDividends(), totals.getQuantity());
+    }
+
     @Transactional
     public InstrumentResponse create(InstrumentRequest request) {
         Instrument entity = mapper.create(request);

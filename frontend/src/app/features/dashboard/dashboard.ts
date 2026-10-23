@@ -1,57 +1,49 @@
-import { DataTable } from '../../shared/ui/data-table';
-import { Chip } from '../../shared/ui/chip';
-import { UiDatepicker } from '../../shared/ui/controls/datepicker';
-import { Component, computed, inject } from '@angular/core';
+import { PageHeader } from '../../shared/ui/page-header';
+import { Component, computed, inject, signal } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { PanelTabs, PanelTab } from '../../shared/ui/panel-tabs';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { switchMap } from 'rxjs';
-import { DashboardApi, DashboardData } from './dashboard-api';
-import { summarize } from './dashboard-summary';
-import { PageNavigation } from '../../core/http/page-navigation';
-import { ApiErrors, loadState, loading } from '../../core/errors/api-errors';
 import { Icon } from '../../shared/ui/icon';
-import { Notice } from '../../shared/ui/notice';
-import { CashFlow } from './cash-flow';
+import { validMonth } from '../../shared/utils/dates';
 import { WealthHistory } from './wealth-history';
 import { WealthAllocation } from './wealth-allocation';
-import { MoneyPipe } from '../../shared/utils/money-pipe';
-import { currentMonth, validMonth } from '../../shared/utils/dates';
-
+import { DashboardMetric } from './metric-card';
+import { PageNavigation } from '../../core/http/page-navigation';
+import { MonthSelector } from '../../shared/ui/month-selector';
+import { CurrentSituationCard } from './current-situation';
 @Component({
   imports: [
-    DataTable,
-    Chip,
-    UiDatepicker,
+    PageHeader,
+    MonthSelector,
+    PanelTabs,
     TranslatePipe,
     RouterLink,
     Icon,
-    Notice,
     WealthHistory,
     WealthAllocation,
-    CashFlow,
-    MoneyPipe,
+    DashboardMetric,
+    CurrentSituationCard,
   ],
   providers: [PageNavigation],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  protected readonly nav = inject(PageNavigation);
-  private readonly api = inject(DashboardApi);
-  private readonly errors = inject(ApiErrors);
-  protected readonly month = computed(() => validMonth(this.nav.params().get('month')));
-  protected readonly now = currentMonth();
-  protected readonly state = toSignal(
-    this.nav.changes$.pipe(
-      switchMap(([params]) =>
-        loadState(this.api.report(validMonth(params.get('month'))), this.errors),
-      ),
-    ),
-    { initialValue: loading<DashboardData>() },
+  protected readonly activePanel = signal('current');
+  protected readonly compactView = toSignal(
+    inject(BreakpointObserver)
+      .observe('(max-width: 780px), (max-height: 650px)')
+      .pipe(map((state) => state.matches)),
+    { initialValue: false },
   );
-  protected readonly summary = computed(() => {
-    const data = this.state().data;
-    return data ? summarize(data, this.month()) : null;
-  });
+  protected readonly panels: readonly PanelTab[] = [
+    { value: 'current', label: 'dashboard.currentTab' },
+    { value: 'allocation', label: 'dashboard.allocationTab' },
+    { value: 'wealth', label: 'dashboard.historyTab' },
+  ];
+  protected readonly nav = inject(PageNavigation);
+  protected readonly month = computed(() => validMonth(this.nav.params().get('month')));
 }

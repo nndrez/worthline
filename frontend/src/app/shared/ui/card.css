@@ -1,0 +1,57 @@
+:host {
+  display: block;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.card-body {
+  position: relative;
+}
+.card-content {
+  height: 100%;
+  overflow: auto;
+}
+:host(.is-contained) .card-content {
+  overflow: hidden;
+}
+:host([aria-busy='false']) .card-content {
+  animation: ui-content-enter var(--motion-enter-duration) var(--motion-easing) both;
+}
+.card-content.is-hidden {
+  display: none;
+}
+.card-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  overflow: auto;
+}
+:host(.is-compact) .card-status {
+  padding: 0;
+}
+:host(.is-fluid) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+:host(.is-fluid) .card-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+:host(.is-fluid) .card-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+:host(.is-fluid) .card-content.is-hidden {
+  display: none;
+}
+
+:host(.is-fluid.is-contained) .card-content {
+  overflow: hidden;
+}

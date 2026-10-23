@@ -6,7 +6,7 @@
       ><span>{{ 'app.name' | translate }}</span
       ><span class="brand-dot">.</span></a
     >
-    <nav class="main-nav" [attr.aria-label]="'app.personal' | translate">
+    <nav class="main-nav" [attr.aria-label]="'app.navigation' | translate">
       <a routerLink="/overview" routerLinkActive="active"
         ><app-icon name="grid" />{{ 'nav.overview' | translate }}</a
       >
@@ -29,15 +29,8 @@
         ><app-icon name="tag" />{{ 'nav.categories' | translate }}</a
       >
     </nav>
-    <span class="personal-space"
-      ><span class="status-dot"></span>{{ 'app.personal' | translate }}</span
-    >
   </div>
 </header>
 <main #contentMain id="main-content" tabindex="-1">
   <div class="page-content"><router-outlet (activate)="resetContentScroll()" /></div>
 </main>
-<footer class="app-footer">
-  <span>{{ 'app.tagline' | translate }}</span
-  ><span>{{ 'app.dataNote' | translate }}</span>
-</footer>

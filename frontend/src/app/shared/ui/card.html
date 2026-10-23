@@ -1,0 +1,30 @@
+<ng-content select="[cardHeader]" />
+<div #body class="card-body" [style.height.px]="fill() ? null : bodyHeight()">
+  <div
+    class="card-content"
+    [attr.tabindex]="scrollable() ? 0 : null"
+    [class.is-hidden]="loading() || error() || empty()"
+  >
+    <ng-content />
+  </div>
+  @if (loading()) {
+    <app-loading-state class="card-status" [compact]="compact()" />
+  } @else if (error(); as error) {
+    <app-error-state
+      class="card-status"
+      [error]="error"
+      [compact]="compact()"
+      (retry)="retry.emit()"
+    />
+  } @else if (empty()) {
+    <app-empty-state
+      class="card-status"
+      [title]="emptyTitle()"
+      [description]="emptyDescription()"
+      [icon]="emptyIcon()"
+      [compact]="compact()"
+    >
+      <ng-content select="[cardEmptyActions]" />
+    </app-empty-state>
+  }
+</div>

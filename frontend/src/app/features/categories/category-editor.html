@@ -1,6 +1,6 @@
 <app-dialog-frame
+  size="form"
   [heading]="initial() ? 'categories.edit' : 'categories.create'"
-  description="categories.dialogDescription"
   [busy]="mutation.busy()"
   (closed)="closed.emit()"
 >
@@ -59,7 +59,6 @@
         }
       </div>
     </fieldset>
-    <p class="inline-note mt-5">{{ 'categories.structureHint' | translate }}</p>
     <app-notice class="mt-4" [error]="options().error" />
     <app-notice class="mt-4" [error]="mutation.error()" />
     <div class="dialog-actions">

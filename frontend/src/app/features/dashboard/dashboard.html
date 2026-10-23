@@ -1,134 +1,55 @@
-<section class="page-heading">
-  <div>
-    <span class="eyebrow">{{ 'dashboard.eyebrow' | translate }}</span>
-    <h1>{{ 'dashboard.title' | translate }}</h1>
-    <p>{{ 'dashboard.subtitle' | translate }}</p>
+<app-page-header title="dashboard.title">
+  <app-month-selector
+    inputId="dashboard-month"
+    [value]="month()"
+    [label]="'dashboard.period' | translate"
+    (valueChange)="nav.update({ month: $event })"
+  />
+  <a class="btn btn-sm" routerLink="/balances" [queryParams]="{ month: month() }"
+    ><app-icon name="plus" />{{ 'dashboard.record' | translate }}</a
+  >
+</app-page-header>
+<div class="dashboard-board">
+  <app-panel-tabs prefix="dashboard" [items]="panels" [(value)]="activePanel" />
+  <app-current-situation
+    id="dashboard-current"
+    [month]="month()"
+    class="dashboard-panel current"
+    [class.is-active]="activePanel() === 'current'"
+    [attr.role]="compactView() ? 'tabpanel' : null"
+    [attr.aria-labelledby]="compactView() ? 'dashboard-tab-current' : null"
+  />
+  <app-wealth-allocation
+    id="dashboard-allocation"
+    [month]="month()"
+    class="dashboard-panel allocation"
+    [class.is-active]="activePanel() === 'allocation'"
+    [attr.role]="compactView() ? 'tabpanel' : null"
+    [attr.aria-labelledby]="compactView() ? 'dashboard-tab-allocation' : null"
+  />
+  <div class="metrics-grid">
+    <app-dashboard-metric
+      kind="income"
+      [month]="month()"
+      (monthSelected)="nav.update({ month: $event })"
+    />
+    <app-dashboard-metric
+      kind="expenses"
+      [month]="month()"
+      (monthSelected)="nav.update({ month: $event })"
+    />
+    <app-dashboard-metric
+      kind="cash-flow"
+      [month]="month()"
+      (monthSelected)="nav.update({ month: $event })"
+    />
   </div>
-  <div class="page-actions">
-    <label class="month-control" for="dashboard-month"
-      ><span class="sr-only">{{ 'balances.month' | translate }}</span
-      ><ui-datepicker
-        inputId="dashboard-month"
-        [value]="month()"
-        [latest]="now"
-        (valueChange)="nav.update({ month: $event })"
-        [monthOnly]="true"
-        [label]="'balances.month' | translate" /></label
-    ><a class="btn" routerLink="/balances" [queryParams]="{ month: month() }"
-      ><app-icon name="plus" />{{ 'dashboard.record' | translate }}</a
-    >
-  </div>
-</section>
-<app-notice [error]="state().error" [retryable]="true" (retry)="nav.reload()" />
-@if (state().loading) {
-  <div class="dashboard-loading" role="status">
-    <div class="panel">
-      <div class="loading-line"></div>
-      <p class="table-loading">{{ 'common.loading' | translate }}</p>
-    </div>
-    <div class="panel"></div>
-  </div>
-}
-@if (summary(); as data) {
-  @if (!data.accounts.length) {
-    <section class="welcome panel">
-      <span class="welcome-icon"><app-icon name="leaf" /></span
-      ><span class="eyebrow">{{ 'dashboard.start' | translate }}</span>
-      <h2>{{ 'dashboard.startTitle' | translate }}</h2>
-      <p>{{ 'dashboard.startBody' | translate }}</p>
-      <a class="btn" routerLink="/accounts"
-        ><app-icon name="plus" />{{ 'dashboard.startAction' | translate }}</a
-      >
-    </section>
-    @if (data.income !== '0.00' || data.expenses !== '0.00') {
-      <app-cash-flow class="block mt-6" [summary]="data" [month]="month()" />
-    }
-  } @else {
-    <div class="overview-grid">
-      <app-wealth-history [summary]="data" [month]="month()" />
-      <app-wealth-allocation [summary]="data" />
-    </div>
-    <app-cash-flow [summary]="data" [month]="month()" />
-    <div class="bottom-grid">
-      <section class="panel">
-        <div class="section-heading">
-          <div>
-            <h2>{{ 'dashboard.accounts' | translate }}</h2>
-            <p>{{ 'dashboard.accountsHint' | translate }}</p>
-          </div>
-          <a class="text-link" routerLink="/accounts"
-            >{{ 'dashboard.allAccounts' | translate }}<app-icon name="arrow"
-          /></a>
-        </div>
-        <app-data-table [contained]="false" [label]="'dashboard.accounts' | translate"
-          ><table class="data-table accounts-preview">
-            <thead>
-              <tr>
-                <th scope="col">{{ 'fields.accountId' | translate }}</th>
-                <th scope="col">{{ 'fields.type' | translate }}</th>
-                <th scope="col" class="numeric">{{ 'fields.amount' | translate }}</th>
-                <th scope="col">
-                  <span class="sr-only">{{ 'common.actions' | translate }}</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (account of data.accounts.slice(0, 5); track account.id) {
-                <tr>
-                  <td>
-                    <div class="account-name">
-                      <span class="account-avatar"
-                        ><app-icon
-                          [name]="
-                            account.type === 'CASH'
-                              ? 'bank'
-                              : account.type === 'PENSION'
-                                ? 'leaf'
-                                : 'chart'
-                          " /></span
-                      ><span>{{ account.name }}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <app-chip>{{ 'types.' + account.type | translate }}</app-chip>
-                  </td>
-                  <td class="numeric">
-                    @if (account.balance !== null) {
-                      {{ account.balance | money }}
-                    } @else {
-                      <span class="missing-badge">{{ 'common.missing' | translate }}</span>
-                    }
-                  </td>
-                  <td>
-                    <a
-                      class="icon-button"
-                      routerLink="/balances"
-                      [queryParams]="{ accountId: account.id, month: month() }"
-                      [attr.aria-label]="'accounts.recordBalance' | translate"
-                      ><app-icon name="right"
-                    /></a>
-                  </td>
-                </tr>
-              }
-            </tbody></table
-        ></app-data-table>
-      </section>
-      <aside class="completion-card">
-        <span class="completion-icon"><app-icon name="calendar" /></span
-        ><span class="eyebrow">{{ 'balances.eyebrow' | translate }}</span>
-        <h2>{{ 'dashboard.completion' | translate }}</h2>
-        <p>{{ 'dashboard.completionBody' | translate }}</p>
-        <div class="completion-progress">
-          <span [style.width.%]="(data.recorded / data.accounts.length) * 100"></span>
-        </div>
-        <span class="completion-label">{{
-          'dashboard.completionCount'
-            | translate: { recorded: data.recorded, total: data.accounts.length }
-        }}</span
-        ><a class="btn btn-secondary" routerLink="/balances" [queryParams]="{ month: month() }"
-          >{{ 'dashboard.recordAction' | translate }}<app-icon name="arrow"
-        /></a>
-      </aside>
-    </div>
-  }
-}
+  <app-wealth-history
+    id="dashboard-wealth"
+    class="dashboard-panel wealth"
+    [class.is-active]="activePanel() === 'wealth'"
+    [attr.role]="compactView() ? 'tabpanel' : null"
+    [attr.aria-labelledby]="compactView() ? 'dashboard-tab-wealth' : null"
+    [month]="month()"
+  />
+</div>

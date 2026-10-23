@@ -1,0 +1,29 @@
+:host {
+  display: contents;
+}
+h3 {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 550;
+  margin: 0 0 12px;
+}
+.chart-dialog-body {
+  display: grid;
+  grid-template-rows: minmax(150px, 1.3fr) minmax(120px, 1fr);
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+app-time-series-chart {
+  padding: 14px;
+}
+@media (max-width: 500px) {
+  .chart-dialog-body {
+    gap: 12px;
+    grid-template-rows: minmax(140px, 1fr) minmax(120px, 1fr);
+  }
+  app-time-series-chart {
+    padding: 8px;
+  }
+}

@@ -2,6 +2,7 @@
 @import '@fontsource-variable/inter';
 @import './app/shared/ui/controls/theme.css';
 @import './app/shared/ui/motion.css';
+@import './app/shared/ui/scrollbar.css';
 
 :root {
   --canvas: #f7f8fa;
@@ -11,30 +12,23 @@
   --muted: #616b76;
   --border: #e9ebef;
   --border-strong: #d6dbe1;
-  --accent: #257b62;
-  --accent-light: #eef8f3;
+  --accent: #383c43;
+  --accent-light: #f1f2f4;
+  --positive: #257b62;
+  --positive-bg: #eef8f3;
+  --positive-border: #e0ece5;
+  --chart-history: #519e82;
   --danger: #b33d48;
   --danger-bg: #fff1f2;
-  --warning-bg: #fffbef;
-  --warning-border: #ecddad;
-  --warning-text: #795c1b;
+  --warning-bg: #f8f9fb;
+  --warning-border: #e9ebef;
+  --warning-text: #454a51;
   --chart-cash: #83bba5;
   --chart-investment: #b6a3d2;
   --chart-pension: #e6c389;
   --radius: 14px;
   --shadow: 0 2px 3px #19212c03, 0 6px 18px #19212c03;
   --font: 'Inter Variable', 'Segoe UI', Arial, sans-serif;
-  --savings-bg: #f1f8f4;
-  --savings-border: #e0ece5;
-  --savings-icon-bg: #e7f1eb;
-  --savings-icon-border: #dce9e0;
-  --completion-bg: #edf2ef;
-  --completion-border: #e1e8e3;
-  --completion-accent: #50715e;
-  --completion-text: #59675e;
-  --progress-track: #dae4dc;
-  --progress-fill: #6a9b7c;
-  --completion-button: #fff9;
   --shadow-ink: #19212c12;
   --shadow-soft-ink: #19212c06;
   --dialog-shadow-ink: #18222626;
@@ -109,7 +103,7 @@ button {
     border-color 0.16s;
 }
 ::selection {
-  background: #d9eee3;
+  background: #e3e5e8;
 }
 button svg {
   pointer-events: none;

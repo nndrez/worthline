@@ -27,7 +27,7 @@ app-data-table .table-viewport {
   min-width: 0;
   overflow: auto;
   overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
 }
 app-data-table .table-viewport:focus-visible {
   outline-offset: -3px;
@@ -44,66 +44,26 @@ app-data-table .data-table thead th {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: var(--surface-alt);
+  background: color-mix(in srgb, var(--surface-alt) 50%, var(--surface));
 }
 app-data-table .table-error {
-  display: block;
+  display: flex;
+  min-height: 100%;
   padding: 20px;
 }
 app-data-table .table-content:has(app-empty-state) {
   display: grid;
   place-items: center;
 }
-app-data-table .table-progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  overflow: hidden;
-  background: var(--accent-light);
-}
-app-data-table .table-progress::after {
-  content: '';
-  display: block;
-  width: 35%;
-  height: 100%;
-  background: var(--accent);
-  animation: table-progress 1.3s ease-in-out infinite;
-}
-app-data-table .table-skeleton {
+app-data-table .table-loading-overlay {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  background: var(--surface);
+  z-index: 3;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
 }
-app-data-table .skeleton-heading {
-  height: 46px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-alt);
-}
-app-data-table .skeleton-row {
-  display: grid;
-  gap: 24px;
-  align-items: center;
-  height: 78px;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--border);
-}
-app-data-table .skeleton-cell {
-  display: block;
-  width: 75%;
-  max-width: 170px;
-  height: 12px;
-  border-radius: 6px;
-  background: linear-gradient(100deg, var(--border) 20%, var(--surface-alt) 45%, var(--border) 70%);
-  background-size: 250% 100%;
-  animation: table-shimmer 1.6s ease-in-out infinite;
-}
-app-data-table .table-pagination-skeleton {
+app-data-table .table-pagination-placeholder {
   flex-shrink: 0;
   height: 70px;
-  padding: 28px 24px;
   border-top: 1px solid var(--border);
 }
 app-data-table.is-embedded {
@@ -116,32 +76,6 @@ app-data-table.is-embedded {
 app-data-table.is-embedded .table-viewport {
   max-height: 340px;
 }
-@keyframes table-progress {
-  from {
-    transform: translateX(-110%);
-  }
-  to {
-    transform: translateX(390%);
-  }
-}
-@keyframes table-shimmer {
-  from {
-    background-position: 100% 0;
-  }
-  to {
-    background-position: -100% 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  app-data-table .table-content {
-    transition: none;
-  }
-  app-data-table .skeleton-cell,
-  app-data-table .table-progress::after {
-    animation: none;
-  }
-}
-
 app-data-table .data-table {
   width: 100%;
   border-collapse: separate;
@@ -150,14 +84,14 @@ app-data-table .data-table {
   text-align: left;
 }
 app-data-table .data-table th {
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.4;
   color: var(--muted);
-  font-weight: 550;
-  letter-spacing: 0.6px;
-  background: #fcfcfd;
+  font-weight: 500;
+  letter-spacing: 0;
   border-bottom: 1px solid var(--border);
   padding: 14px 24px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 app-data-table .data-table td {
   padding: 20px 24px;
@@ -168,8 +102,27 @@ app-data-table .data-table td {
 app-data-table .data-table tr:last-child td {
   border-bottom: 0;
 }
+app-data-table.is-compact .data-table th {
+  padding: 8px 16px;
+}
+app-data-table.is-compact .data-table td {
+  height: 46px;
+  padding: 9px 16px;
+  font-size: 12px;
+}
+app-data-table.is-compact.is-embedded .table-viewport {
+  max-height: none;
+}
+app-data-table.is-embedded.is-fluid {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+app-data-table.is-compact .table-pagination-placeholder {
+  height: 46px;
+}
 app-data-table .data-table tbody tr:hover {
-  background: #fcfcfd;
+  background: var(--surface-alt);
 }
 app-data-table .data-table .numeric {
   text-align: right;
@@ -215,4 +168,17 @@ app-data-table .table-content:empty {
   app-data-table .data-table td {
     padding: 15px 18px;
   }
+}
+
+app-data-table.has-plain-header .data-table thead th {
+  background: var(--surface);
+  border-bottom-color: var(--border);
+}
+
+app-data-table .interactive-row {
+  cursor: pointer;
+}
+app-data-table .interactive-row:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
 }

@@ -13,11 +13,16 @@ let nextDialog = 0;
 @Component({
   selector: 'app-dialog-frame',
   imports: [TranslatePipe, Icon],
-  template: ` <dialog #modal [attr.aria-labelledby]="headingId" (cancel)="cancel($event)">
+  template: ` <dialog
+    #modal
+    [class.form-dialog]="size() === 'form'"
+    [class.chart-dialog]="size() === 'chart'"
+    [attr.aria-labelledby]="headingId"
+    (cancel)="cancel($event)"
+  >
     <div class="dialog-content">
       <header>
         <div>
-          <span class="eyebrow">{{ 'app.name' | translate }}</span>
           <h2 [id]="headingId">{{ heading() | translate }}</h2>
           @if (description()) {
             <p>{{ description() | translate }}</p>
@@ -41,6 +46,7 @@ let nextDialog = 0;
 export class DialogFrame implements OnDestroy {
   readonly heading = input.required<string>();
   readonly description = input('');
+  readonly size = input<'default' | 'form' | 'chart'>('default');
   readonly busy = input(false);
   readonly closed = output<void>();
   protected readonly headingId = `dialog-heading-${++nextDialog}`;

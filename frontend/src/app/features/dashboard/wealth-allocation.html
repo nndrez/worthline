@@ -1,55 +1,114 @@
-@let data = summary();
-<section class="panel allocation-panel">
-  <div class="section-heading">
+<app-card
+  [fill]="true"
+  [empty]="resource.state().data?.total === null"
+  emptyTitle="dashboard.noBalances"
+  [label]="'dashboard.allocation' | translate"
+  [loading]="resource.state().loading"
+  [error]="resource.state().error"
+  [bodyHeight]="360"
+  (retry)="resource.reload()"
+>
+  <a
+    cardEmptyActions
+    class="btn btn-secondary btn-sm"
+    routerLink="/balances"
+    [queryParams]="{ month: month() }"
+    >{{ 'dashboard.recordAction' | translate }}</a
+  >
+  <div cardHeader class="section-heading">
     <div>
       <h2>{{ 'dashboard.allocation' | translate }}</h2>
-      <p>{{ 'dashboard.allocationHint' | translate }}</p>
     </div>
-    <app-icon name="grid" />
   </div>
-  <div class="donut" [class.donut-empty]="!data.allocationAvailable">
-    <svg viewBox="0 0 200 200" aria-hidden="true">
-      <circle
-        cx="100"
-        cy="100"
-        r="77"
-        pathLength="100"
-        fill="none"
-        stroke="var(--surface-alt)"
-        stroke-width="20"
-      />
-      @if (data.allocationAvailable) {
-        @for (group of data.allocation; track group.type) {
+  @if (resource.state().data; as data) {
+    <div class="allocation-content">
+      @if (selected(); as group) {
+        <app-chart-tooltip
+          [anchor]="anchor()"
+          [label]="'types.' + group.type | translate"
+          [value]="group.total"
+          [detail]="
+            data.available && group.total !== null
+              ? (group.percentage | number: '1.0-2') + '%'
+              : ('common.missing' | translate)
+          "
+        />
+      }
+      <div #donut class="donut">
+        <svg
+          viewBox="0 0 200 200"
+          role="img"
+          [attr.aria-label]="'dashboard.allocation' | translate"
+        >
           <circle
             cx="100"
             cy="100"
             r="77"
             pathLength="100"
             fill="none"
-            [attr.stroke]="group.color"
+            stroke="var(--surface-alt)"
             stroke-width="20"
-            [attr.stroke-dasharray]="group.dash"
-            [attr.stroke-dashoffset]="group.offset"
-            transform="rotate(-90 100 100)"
           />
-        }
-      }
-    </svg>
-    <div class="donut-center">
-      <span>{{ 'dashboard.wealth' | translate }}</span
-      ><strong>{{ data.total | money }}</strong>
-    </div>
-  </div>
-  @if (!data.allocationAvailable && data.total !== null) {
-    <p class="text-xs text-muted px-6 pb-4">{{ 'dashboard.allocationUnavailable' | translate }}</p>
-  }
-  <div class="allocation-legend">
-    @for (group of data.allocation; track group.type) {
-      <div>
-        <span class="legend-dot" [style.background]="group.color"></span
-        ><span>{{ 'types.' + group.type | translate }}</span
-        ><strong>{{ group.total | money }}</strong>
+          @if (data.available) {
+            @for (group of groups(); track group.type) {
+              <circle
+                cx="100"
+                cy="100"
+                r="77"
+                pathLength="100"
+                fill="none"
+                [attr.stroke]="group.color"
+                [attr.stroke-width]="selected()?.type === group.type ? 25 : 20"
+                [attr.stroke-dasharray]="group.dash"
+                [attr.stroke-dashoffset]="group.offset"
+                transform="rotate(-90 100 100)"
+                (pointerenter)="select(group, $event)"
+                (pointerleave)="selected.set(null)"
+                (click)="select(group, $event)"
+              />
+            }
+          }
+        </svg>
+        <div class="donut-center">
+          <span>{{
+            (selected() ? 'types.' + selected()!.type : 'dashboard.total') | translate
+          }}</span
+          ><strong>{{ (selected() ? selected()!.total : data.total) | money }}</strong>
+        </div>
       </div>
-    }
-  </div>
-</section>
+      <div class="allocation-legend">
+        @for (group of groups(); track group.type) {
+          <button
+            type="button"
+            [attr.aria-pressed]="selected()?.type === group.type"
+            (focus)="select(group, $event)"
+            (blur)="selected.set(null)"
+            (pointerenter)="select(group, $event)"
+            (pointerleave)="selected.set(null)"
+            (click)="select(group, $event)"
+            (keydown.escape)="selected.set(null)"
+          >
+            <span class="legend-dot" [style.background]="group.color"></span
+            ><span>{{ 'types.' + group.type | translate }}</span
+            ><strong>{{ group.total | money }}</strong
+            ><span class="percentage">
+              @if (data.available && group.total !== null) {
+                {{ group.percentage | number: '1.0-2' }}%
+              } @else {
+                —
+              }
+            </span>
+          </button>
+        }
+      </div>
+      @if (!data.available) {
+        <p class="allocation-note">
+          {{
+            (data.total === null ? 'dashboard.noBalance' : 'dashboard.allocationUnavailable')
+              | translate
+          }}
+        </p>
+      }
+    </div>
+  }
+</app-card>

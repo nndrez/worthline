@@ -1,25 +1,23 @@
-@let data = summary();
-<section class="panel wealth-panel">
-  <div class="wealth-heading">
-    <div>
-      <p class="muted-label">
-        {{ 'dashboard.wealth' | translate }}
-        <span class="period-label">/ {{ monthLabel(month()) }}</span>
-      </p>
-      <p class="wealth-value">{{ data.total | money }}</p>
-      <p class="wealth-note" [class.complete]="data.missing === 0">
-        <app-icon [name]="data.missing === 0 ? 'check' : 'info'" />{{
-          (data.total === null
-            ? 'dashboard.noBalance'
-            : data.missing === 1
-              ? 'dashboard.incompleteOne'
-              : data.missing
-                ? 'dashboard.incomplete'
-                : 'dashboard.complete'
-          ) | translate: { count: data.missing }
-        }}
-      </p>
-    </div>
+<app-card
+  [fill]="true"
+  [scrollable]="false"
+  [empty]="empty()"
+  emptyTitle="dashboard.noHistory"
+  emptyIcon="chart"
+  [label]="'dashboard.history' | translate"
+  [loading]="resource.state().loading"
+  [error]="resource.state().error"
+  (retry)="resource.reload()"
+>
+  <a
+    cardEmptyActions
+    class="btn btn-secondary btn-sm"
+    routerLink="/balances"
+    [queryParams]="{ month: month() }"
+    >{{ 'dashboard.recordAction' | translate }}</a
+  >
+  <div cardHeader class="wealth-heading">
+    <h2>{{ 'dashboard.history' | translate }}</h2>
     <div class="period-tabs" [attr.aria-label]="'dashboard.history' | translate">
       @for (count of [3, 6, 12]; track count) {
         <button
@@ -32,93 +30,34 @@
       }
     </div>
   </div>
-  @if (chart(); as graph) {
-    <div class="chart-container">
-      <svg viewBox="0 0 800 235" role="img" [attr.aria-label]="'dashboard.chartLabel' | translate">
-        <defs>
-          <linearGradient id="wealth-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--accent)" stop-opacity=".11" />
-            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-        @for (tick of graph.ticks; track tick.y) {
-          <line x1="65" x2="765" [attr.y1]="tick.y" [attr.y2]="tick.y" class="chart-grid" />
-          <text x="0" [attr.y]="tick.y + 4" class="axis-label">{{ tick.label }}</text>
-        }
-        @for (segment of graph.segments; track $index) {
-          <path [attr.d]="segment.area" fill="url(#wealth-fill)" />
-          <path
-            [attr.d]="segment.line"
-            fill="none"
-            stroke="var(--accent)"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        }
-        @for (point of graph.points; track point.month) {
-          <text [attr.x]="point.x" y="226" text-anchor="middle" class="axis-label">
-            {{ point.label }}
-          </text>
-          @if (point.y !== null) {
-            <circle
-              [attr.cx]="point.x"
-              [attr.cy]="point.y"
-              r="4"
-              fill="white"
-              stroke="var(--accent)"
-              stroke-width="2"
-            >
-              <title>
-                {{ monthLabel(point.month) }}: {{ point.total | money }}
-                {{ (point.partial ? 'dashboard.partial' : '') | translate }}
-              </title>
-            </circle>
-          }
-        }
-      </svg>
-    </div>
-    <details class="chart-details">
-      <summary>{{ 'dashboard.chartTable' | translate }}</summary>
-      <app-data-table [contained]="false" [label]="'dashboard.chartTable' | translate"
-        ><table class="data-table">
-          <thead>
-            <tr>
-              <th>{{ 'dashboard.month' | translate }}</th>
-              <th>{{ 'dashboard.value' | translate }}</th>
-              <th>{{ 'common.information' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (point of graph.points; track point.month) {
-              <tr>
-                <td>{{ monthLabel(point.month) }}</td>
-                <td>{{ point.total | money }}</td>
-                <td>
-                  {{
-                    (point.total === null
-                      ? 'dashboard.missing'
-                      : point.partial
-                        ? 'dashboard.partial'
-                        : 'common.recorded'
-                    ) | translate
-                  }}
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table></app-data-table
-      >
-    </details>
-  } @else {
-    <app-empty-state
-      title="dashboard.noHistory"
-      description="dashboard.noHistoryBody"
-      icon="chart"
-    />
-  }
+  <app-time-series-chart
+    class="chart-container"
+    [points]="points()"
+    [series]="series"
+    [month]="month()"
+    [label]="'dashboard.chartLabel' | translate"
+  />
   <div class="chart-caption">
-    <span class="legend-line"></span>{{ 'dashboard.historyHint' | translate
-    }}<span class="ml-auto">EUR</span>
+    <button
+      type="button"
+      class="text-link"
+      (click)="detailsOpen.set(true)"
+      [attr.aria-label]="'dashboard.chartTable' | translate"
+    >
+      {{ 'dashboard.details' | translate }}
+    </button>
   </div>
-</section>
+</app-card>
+@if (detailsOpen()) {
+  <app-chart-dialog
+    heading="dashboard.chartTable"
+    [points]="points()"
+    [series]="series"
+    [month]="month()"
+    [showTotal]="true"
+    [loading]="resource.state().loading"
+    [error]="resource.state().error"
+    (retry)="resource.reload()"
+    (closed)="detailsOpen.set(false)"
+  />
+}

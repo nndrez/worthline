@@ -1,0 +1,48 @@
+<app-data-table
+  density="compact"
+  [contained]="false"
+  [fill]="true"
+  [label]="label()"
+  [contentKey]="points()"
+  [loading]="loading()"
+  [error]="error()"
+  (retry)="retry.emit()"
+>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th scope="col">{{ 'common.month' | translate }}</th>
+        @for (line of series(); track line.key) {
+          <th scope="col" class="numeric">{{ line.label }}</th>
+        }
+        @if (showTotal()) {
+          <th scope="col" class="numeric">{{ 'common.total' | translate }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (point of points(); track point.month) {
+        <tr
+          appTableRow
+          [attr.data-month]="point.month"
+          [class.selected-month]="point.month === month()"
+          [class.highlighted-month]="point.month === highlightedMonth()"
+          [attr.aria-current]="point.month === month() ? 'date' : null"
+          (pointerenter)="monthHighlighted.emit(point.month)"
+          (pointerleave)="monthHighlighted.emit(null)"
+          (focusin)="monthHighlighted.emit(point.month)"
+          (focusout)="monthHighlighted.emit(null)"
+          (rowActivated)="monthSelected.emit(point.month)"
+        >
+          <td>{{ monthLabel(point.month) }}</td>
+          @for (line of series(); track line.key) {
+            <td class="numeric">{{ point.values[line.key] ?? null | money }}</td>
+          }
+          @if (showTotal()) {
+            <td class="numeric">{{ point.total | money }}</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</app-data-table>

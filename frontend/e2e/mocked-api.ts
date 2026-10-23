@@ -1,5 +1,7 @@
+import Decimal from 'decimal.js';
 import { Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
+import { dashboardFixture } from './dashboard-fixtures';
 
 export interface TestEntity {
   id: string;
@@ -103,8 +105,36 @@ export async function mockApi(page: Page, store = fixtures()): Promise<TestStore
     const rows = store[resource];
     const respond = (body: unknown, status = 200) =>
       route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
+    if (resource === 'dashboard') return respond(dashboardFixture(url, store));
     if (!rows) return respond({ errorCode: 'common.http.error' }, 404);
     const method = route.request().method();
+    if (method === 'GET' && resource === 'instruments' && url.pathname.endsWith('/summary')) {
+      const operations = store['investment-operations'].filter((row) => row['instrumentId'] === id);
+      const sum = (type: string) =>
+        operations
+          .filter((row) => row['type'] === type)
+          .reduce((total, row) => total.plus(String(row['amount'])), new Decimal(0))
+          .toFixed(2);
+      return respond({
+        instrument: rows.find((row) => row.id === id),
+        currency: 'EUR',
+        operationCount: operations.length,
+        purchases: sum('BUY'),
+        sales: sum('SELL'),
+        dividends: sum('DIVIDEND'),
+        quantity: operations
+          .reduce(
+            (total, row) =>
+              row['type'] === 'DIVIDEND'
+                ? total
+                : total.plus(
+                    new Decimal(String(row['quantity'])).mul(row['type'] === 'BUY' ? 1 : -1),
+                  ),
+            new Decimal(0),
+          )
+          .toFixed(6),
+      });
+    }
     if (method === 'GET') {
       if (id)
         return respond(

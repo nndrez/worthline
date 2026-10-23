@@ -29,6 +29,9 @@ public class InstrumentController {
     @GetMapping("/{id}")
     public InstrumentResponse get(@PathVariable UUID id) { return service.get(id); }
 
+    @GetMapping("/{id}/summary")
+    public InstrumentSummary summary(@PathVariable UUID id) { return service.summary(id); }
+
     @PostMapping
     public ResponseEntity<InstrumentResponse> create(@Valid @RequestBody InstrumentRequest request) {
         InstrumentResponse response = service.create(request);

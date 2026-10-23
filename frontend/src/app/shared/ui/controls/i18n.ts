@@ -4,6 +4,7 @@ import type { Day, Locale } from 'date-fns';
 import { it } from 'date-fns/locale/it';
 
 export interface UiI18n {
+  loading: string;
   locale: Locale;
   weekStartsOn: Day;
   dateFormat: string;
@@ -31,6 +32,7 @@ export const UI_I18N = new InjectionToken<Signal<UiI18n>>('UI_I18N', {
   factory: () => {
     const translate = inject(TranslateService);
     return computed(() => ({
+      loading: translate.instant('common.loading') as string,
       locale: it,
       weekStartsOn: 1,
       dateFormat: 'dd/MM/yyyy',

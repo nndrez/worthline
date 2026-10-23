@@ -1,3 +1,6 @@
+import { InstrumentSummary } from './instrument-summary';
+import { TableRow } from '../../shared/ui/table-row';
+import { PageHeader } from '../../shared/ui/page-header';
 import { retainTableData } from '../../core/http/retain-table-data';
 import { DataTable } from '../../shared/ui/data-table';
 import { Tabs } from '../../shared/ui/tabs';
@@ -20,6 +23,9 @@ import { Confirmation } from '../../shared/ui/confirmation';
 @Component({
   host: { class: 'list-page' },
   imports: [
+    TableRow,
+    InstrumentSummary,
+    PageHeader,
     DataTable,
     Tabs,
     UiInput,
@@ -39,6 +45,7 @@ export class InstrumentList {
   protected readonly mutation = inject(MutationState);
   private readonly api = inject(PortfolioApi);
   private readonly errors = inject(ApiErrors);
+  protected readonly viewing = signal<Instrument | null>(null);
   protected readonly editorOpen = signal(false);
   protected readonly editing = signal<Instrument | null>(null);
   protected readonly deleting = signal<Instrument | null>(null);

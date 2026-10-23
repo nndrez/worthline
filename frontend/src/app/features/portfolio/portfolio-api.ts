@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiTransport } from '../../core/http/api-transport';
 import { collectPages, PageResponse, Query } from '../../core/http/page';
-import { Instrument, InstrumentRequest, Operation, OperationRequest } from './portfolio.models';
+import {
+  Instrument,
+  InstrumentRequest,
+  InstrumentSummary,
+  Operation,
+  OperationRequest,
+} from './portfolio.models';
 
 @Injectable({ providedIn: 'root' })
 export class PortfolioApi {
@@ -13,6 +19,9 @@ export class PortfolioApi {
     return id
       ? this.transport.put<Instrument>('/instruments/' + id, body)
       : this.transport.post<Instrument>('/instruments', body);
+  }
+  instrumentSummary(id: string) {
+    return this.transport.get<InstrumentSummary>('/instruments/' + id + '/summary');
   }
   deleteInstrument(id: string) {
     return this.transport.delete('/instruments/' + id);

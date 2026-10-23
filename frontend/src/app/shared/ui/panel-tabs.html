@@ -1,0 +1,16 @@
+<div role="tablist" [attr.aria-label]="label() | translate">
+  @for (item of items(); track item.value) {
+    <button
+      type="button"
+      role="tab"
+      [id]="prefix() + '-tab-' + item.value"
+      [attr.aria-controls]="prefix() + '-' + item.value"
+      [attr.aria-selected]="value() === item.value"
+      [tabIndex]="value() === item.value ? 0 : -1"
+      (click)="value.set(item.value)"
+      (keydown)="navigate($event)"
+    >
+      {{ item.label | translate }}
+    </button>
+  }
+</div>

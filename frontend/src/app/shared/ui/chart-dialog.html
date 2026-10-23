@@ -1,0 +1,45 @@
+<app-dialog-frame size="chart" [heading]="heading()" (closed)="closed.emit()">
+  @if (subtitle()) {
+    <h3>{{ subtitle() }}</h3>
+  }
+  <div class="chart-dialog-body">
+    <app-card
+      [fill]="true"
+      [scrollable]="false"
+      [label]="heading() | translate"
+      [loading]="loading()"
+      [error]="error()"
+      [empty]="empty()"
+      emptyTitle="common.noChartData"
+      emptyIcon="chart"
+      (retry)="retry.emit()"
+      ><app-time-series-chart
+        [points]="points()"
+        [series]="series()"
+        [month]="selectedMonth()"
+        [highlightedMonth]="highlightedMonth()"
+        (monthHighlighted)="highlightedMonth.set($event)"
+        [label]="heading() | translate"
+        (monthSelected)="selectMonth($event)"
+    /></app-card>
+    <app-card
+      [fill]="true"
+      [scrollable]="false"
+      [label]="('common.chartValues' | translate) + ': ' + (heading() | translate)"
+      [loading]="loading()"
+      [error]="error()"
+      (retry)="retry.emit()"
+    >
+      <app-chart-data-table
+        [points]="points()"
+        [series]="series()"
+        [month]="selectedMonth()"
+        [highlightedMonth]="highlightedMonth()"
+        [label]="heading() | translate"
+        [showTotal]="showTotal()"
+        (monthHighlighted)="highlightedMonth.set($event)"
+        (monthSelected)="selectMonth($event)"
+      />
+    </app-card>
+  </div>
+</app-dialog-frame>

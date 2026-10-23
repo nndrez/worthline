@@ -1,6 +1,6 @@
 <app-dialog-frame
+  size="form"
   [heading]="initial() ? 'operations.edit' : 'operations.create'"
-  description="operations.dialogDescription"
   [busy]="mutation.busy()"
   (closed)="closed.emit()"
 >
@@ -58,7 +58,6 @@
         <app-field-error
           [visible]="(attempted() || entry.amount().touched()) && entry.amount().invalid()"
         />
-        <span class="field-hint">{{ 'operations.amountHint' | translate }}</span>
       </div>
       @if (model().type !== 'DIVIDEND') {
         <div class="field">
